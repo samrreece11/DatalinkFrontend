@@ -15,6 +15,7 @@
     "@ckeditor/ckeditor5-word-count": "^43.3.0",
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.1.5",
+    "aws-amplify": "^6.8.0",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
     "ckeditor5": "^43.2.0",
@@ -27,15 +28,22 @@
     "reactstrap": "^9.2.3"
   },
   "devDependencies": {
+    "@aws-amplify/backend": "^1.6.0",
+    "@aws-amplify/backend-cli": "^1.4.0",
     "@eslint/js": "^9.11.1",
     "@types/react": "^18.3.10",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.2",
+    "aws-cdk": "^2.165.0",
+    "aws-cdk-lib": "^2.165.0",
+    "constructs": "^10.4.2",
+    "esbuild": "^0.24.0",
     "eslint": "^9.11.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.12",
     "globals": "^15.9.0",
-    "typescript": "^5.5.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
     "typescript-eslint": "^8.7.0",
     "vite": "^5.4.8"
   }
