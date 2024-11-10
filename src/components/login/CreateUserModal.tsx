@@ -11,47 +11,41 @@ import {
   Input,
 } from "reactstrap";
 
-interface LoginModalProps {
+interface CreateUserModalProps {
   isOpen: boolean;
   onClose: () => void;
-  handleLogin: (username: string, password: string) => void;
-  handleCreateUser: () => void;
+  handleCreateUser: (username: string, password: string, email: string) => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({
+const CreateUserModal: React.FC<CreateUserModalProps> = ({
   isOpen,
   onClose,
-  handleLogin,
   handleCreateUser,
 }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
-  const onSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    handleCreateUser(username, password, email);
     setUsername("");
     setPassword("");
-    handleLogin(username, password);
-  };
-
-  const handleClose = () => {
-    setUsername("");
-    setPassword("");
+    setEmail("");
     onClose();
   };
 
   return (
-    <Modal centered={true} isOpen={isOpen} toggle={handleClose}>
-      <ModalHeader toggle={handleClose}>Login</ModalHeader>
+    <Modal isOpen={isOpen} toggle={onClose}>
+      <ModalHeader toggle={onClose}>Create User</ModalHeader>
       <ModalBody>
-        <Form onSubmit={onSubmit}>
+        <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label for="username">Username</Label>
             <Input
               type="text"
               name="username"
               id="username"
-              placeholder="Enter username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
@@ -62,21 +56,27 @@ const LoginModal: React.FC<LoginModalProps> = ({
               type="password"
               name="password"
               id="password"
-              placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormGroup>
-          <Button color="secondary" onClick={handleCreateUser}>
-            Create User
-          </Button>
-          <Button color="primary" type="submit">
-            Login
+          <FormGroup>
+            <Label for="email">Email</Label>
+            <Input
+              type="email"
+              name="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </FormGroup>
+          <Button type="submit" color="primary">
+            Create
           </Button>
         </Form>
       </ModalBody>
       <ModalFooter>
-        <Button color="secondary" onClick={handleClose}>
+        <Button color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </ModalFooter>
@@ -84,4 +84,4 @@ const LoginModal: React.FC<LoginModalProps> = ({
   );
 };
 
-export default LoginModal;
+export default CreateUserModal;

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import LoginModal from "./LoginModal";
 import api from "../../types/api";
+import CreateUserModal from "./CreateUserModal";
 
 const LoginPage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
 
   const handleLogin = (username: string, password: string) => {
     console.log(username, password);
@@ -20,6 +22,26 @@ const LoginPage = () => {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleCreateUser = (
+    username: string,
+    password: string,
+    email: string
+  ) => {
+    api
+      .post("/users/register/", { username, password, email })
+      .then((res) => {
+        console.log(res.data);
+        setIsCreateUserModalOpen(false);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleOpenCreateModal = () => {
+    setIsCreateUserModalOpen(true);
   };
 
   return (
@@ -45,6 +67,12 @@ const LoginPage = () => {
           isOpen={isLoginModalOpen}
           onClose={() => setIsLoginModalOpen(false)}
           handleLogin={handleLogin}
+          handleCreateUser={() => setIsCreateUserModalOpen(true)}
+        />
+        <CreateUserModal
+          isOpen={isCreateUserModalOpen}
+          onClose={() => setIsCreateUserModalOpen(false)}
+          handleCreateUser={handleCreateUser}
         />
       </div>
     </>
