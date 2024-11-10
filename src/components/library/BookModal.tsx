@@ -17,7 +17,7 @@ interface ModalProps {
   onClose: () => void;
   editBook: Book;
   onSave: (book: Book) => void;
-  onDelete: (id: number) => void;
+  onDelete: (book: Book) => void;
 }
 
 const EditBookModal: React.FC<ModalProps> = ({
@@ -56,7 +56,7 @@ const EditBookModal: React.FC<ModalProps> = ({
 
   // Handle deletion
   const handleDelete = () => {
-    onDelete(formData.id);
+    onDelete(formData);
     onClose();
   };
 

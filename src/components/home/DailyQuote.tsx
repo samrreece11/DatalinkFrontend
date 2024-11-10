@@ -86,19 +86,21 @@ const DailyQuoteDisplay = () => {
   };
 
   return (
-    <div className="daily-quote">
-      <div className="title_block">
-        <h3 className="title">Daily Quote</h3>
-      </div>
-
-      {currentDailyQuote && (
-        <div>
-          "{currentDailyQuote.contents}" - By{" "}
-          <i>{IdToBook(currentDailyQuote.book).author}</i>,{" "}
-          {IdToBook(currentDailyQuote.book).title}{" "}
+    <>
+      <div className="daily-quote">
+        <div className="title_block">
+          <h3 className="title">Daily Quote</h3>
         </div>
-      )}
-    </div>
+
+        {currentDailyQuote && (
+          <div>
+            "{currentDailyQuote.contents}" - By{" "}
+            <i>{IdToBook(currentDailyQuote.book).author}</i>,{" "}
+            {IdToBook(currentDailyQuote.book).title}{" "}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

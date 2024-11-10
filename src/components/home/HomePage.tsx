@@ -1,9 +1,10 @@
+import Title from "../utils/TitleBlock";
 import DailyQuoteDisplay from "./DailyQuote";
 
 const HomePage = () => {
   return (
     <>
-      <h1>Home Page</h1>
+      <Title size={1}>Home Page</Title>
       <DailyQuoteDisplay />
     </>
   );

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Book, Action, Quote } from "./libraryTypes";
 
 import BookGroup from "./BookGroup";
@@ -124,14 +123,13 @@ function Library() {
     api.get("/quotes/").then((res) => setQuotes(res.data));
   };
 
-  // Delete book in db by ID
-  const handleDeleteBookById = (id: number) => {
+  const handleDeleteBook = (book: Book) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this book?"
     );
     if (confirmDelete) {
-      axios
-        .delete(`/api/books/${id}/`)
+      api
+        .delete(`/books/${book.id}/`)
         .then(() => refreshList())
         .catch((error) => {
           console.error("There was an error deleting the book!", error);
@@ -279,7 +277,7 @@ function Library() {
           onClose={() => setIsEditModalOpen(false)}
           editBook={initialData}
           onSave={updateBook}
-          onDelete={handleDeleteBookById}
+          onDelete={handleDeleteBook}
         />
         <CreateBookModal
           isOpen={isCreateModalOpen}

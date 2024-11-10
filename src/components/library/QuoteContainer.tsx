@@ -29,7 +29,7 @@ const QuoteContainer = ({ quote, book, refresh }: QuoteProps) => {
         .delete(`/quotes/${quote.id}/`)
         .then(() => refresh())
         .catch((error) => {
-          console.error("There was an error deleting the book!", error);
+          console.error("There was an error deleting the quote!", error);
         });
     }
   };

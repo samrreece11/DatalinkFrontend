@@ -168,7 +168,7 @@
 }
 
 body {
-    background-color: darkslategray !important;
+    background-color: #2f4f4f !important;
 }
 
 .edit-quote-form {
@@ -447,4 +447,75 @@ body {
 }
 .minw-200 {
     min-width: 200px;
+}
+
+.mr-auto {
+    margin-right: auto;
+}
+.ml-auto {
+    margin-left: auto;
+}
+
+/* Login CSS */
+/* login-body styles */
+.login-body {
+    font-family: 'Arial', sans-serif;
+    background-color: #2f4f4f; /* Dark Slate Gray */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    text-align: center;
+}
+
+/* login-container styles */
+.login-container {
+    background-color: #a7a7a7; /* Light Gray */
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* login-header styles */
+.login-header {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 40px;
+}
+
+/* login-intro styles */
+.login-intro {
+    margin-bottom: 30px;
+    font-size: 1.1rem;
+    color: #555;
+}
+
+/* login-ctaBtn styles */
+.login-ctaBtn {
+    display: inline-block;
+    background-color: #008CBA; /* Light Blue */
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.login-ctaBtn:hover,
+.login-ctaBtn:focus {
+    background-color: #005f73; /* Darker Blue */
+    cursor: pointer;
+}
+
+/* login-footer styles */
+.login-footer {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 30px;
 }
