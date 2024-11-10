@@ -40,10 +40,6 @@ const LoginPage = () => {
       });
   };
 
-  const handleOpenCreateModal = () => {
-    setIsCreateUserModalOpen(true);
-  };
-
   return (
     <>
       <div className="login-body">
