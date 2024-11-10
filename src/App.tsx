@@ -3,19 +3,13 @@ import Library from "./components/library/Library";
 import "./App.css"; // Import your CSS file
 import JournalHome from "./components/journal/JournalHome";
 import HomePage from "./components/home/HomePage";
-import NavigationBar from "./components/NavigationBar";
 import TodoHome from "./components/todo/TodoHome";
 import LoginPage from "./components/login/LoginPage";
-import api, { setAuthToken, setUserId } from "./types/api";
+import { setAuthToken, setUserId } from "./types/api";
 import { useEffect } from "react";
 import NavBar from "./components/home/NavBar";
 
 function App() {
-  const handleLogout = () => {
-    localStorage.clear();
-    window.location.reload();
-  };
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("user_id");

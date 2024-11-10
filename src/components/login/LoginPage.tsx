@@ -1,6 +1,5 @@
 import { useState } from "react";
 import LoginModal from "./LoginModal";
-import { Button } from "reactstrap";
 import api from "../../types/api";
 
 const LoginPage = () => {
