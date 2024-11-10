@@ -2,15 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-    // baseURL: 'https://api.dailysync.net/api', // Update with your API base URL
-    baseURL: 'http://localhost:8000', // Update with your API base URL
-    // headers: {
-    //     'Authorization': 'Token 3ed76416d5620713d8249219da754dcdc69c3954'
-    // }
-    // Billy's token
-    // headers: {
-    //     'Authorization': 'Token ba663eeaf797444b6a761dc42d431d5ae8226785'
-    // }
+    baseURL: 'https://api.dailysync.net/', // Update with your API base URL
 });
 
 let authToken: string | null = null;
