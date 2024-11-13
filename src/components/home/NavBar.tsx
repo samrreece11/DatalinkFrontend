@@ -26,7 +26,7 @@ const NavBar: React.FC = () => {
 
   return (
     <div>
-      <Navbar color="dark" light={false} dark={true} expand="md">
+      <Navbar color="dark" dark={true} expand="md">
         <NavbarBrand href="/">Home</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
@@ -46,17 +46,16 @@ const NavBar: React.FC = () => {
               <Dropdown
                 isOpen={isUserDropdownOpen}
                 toggle={toggleUserDropdown}
-                dark={true}
+                dark="true"
                 inNavbar
               >
                 <DropdownToggle nav caret>
                   Welcome, {localStorage.getItem("username")}
                 </DropdownToggle>
-                <DropdownMenu light={false} right>
+                <DropdownMenu end>
                   <DropdownItem>Profile</DropdownItem>
                   <DropdownItem>Settings</DropdownItem>
                   <DropdownItem divider />
-
                   <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
