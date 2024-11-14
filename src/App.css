@@ -257,6 +257,7 @@ body {
 }
 .todo-base {
     display: flex;
+
 }
 
 .todo-container {
@@ -296,9 +297,11 @@ body {
 .sidebar {
     background: #a7a7a7;
     padding: 10px 0px;
-    border: 2px solid black;
     width: 150px;
-    min-height: 90vh;
+    height: 500px;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    
     /* display: inline-block; */
 }
 .todo-body {
@@ -310,6 +313,7 @@ body {
 }
 .sidebar-content {
     text-align: center;
+    overflow-y: auto;
 }
 .category_dropdown {
     all: unset;
@@ -486,7 +490,7 @@ body {
     font-size: 2.5rem;
     font-weight: bold;
     color: #333;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 /* login-intro styles */
@@ -557,4 +561,12 @@ body {
 .bg-lblue-btn:focus {
     background-color: #005f73; /* Darker Blue */
     cursor: pointer;
+}
+
+.grey-box {
+    background-color: #a7a7a7;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
 }

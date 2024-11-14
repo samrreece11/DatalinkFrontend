@@ -5,7 +5,10 @@ const HomePage = () => {
   return (
     <>
       <Title size={1}>Home Page</Title>
-      <DailyQuoteDisplay />
+      <div className="flex">
+        <DailyQuoteDisplay />
+        <div className="grey-box">Additional Features Coming Soon!</div>
+      </div>
     </>
   );
 };

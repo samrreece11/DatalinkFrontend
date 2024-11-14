@@ -92,11 +92,15 @@ const DailyQuoteDisplay = () => {
           <h3 className="title">Daily Quote</h3>
         </div>
 
-        {currentDailyQuote && (
+        {currentDailyQuote.contents ? (
           <div>
             "{currentDailyQuote.contents}" - By{" "}
             <i>{IdToBook(currentDailyQuote.book).author}</i>,{" "}
             {IdToBook(currentDailyQuote.book).title}{" "}
+          </div>
+        ) : (
+          <div>
+            No Quotes yet. Add some quotes to your books to get started!
           </div>
         )}
       </div>

@@ -132,7 +132,6 @@ const TodoHome = () => {
             currentCategory={currentCategory}
           />
         )}
-        ;
         {editCategory && (
           <EditCategoryModal
             isOpen={isEditModalOpen}
