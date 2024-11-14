@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../../types/api";
 import { Button, Form, FormGroup, Input } from "reactstrap";
 import Title from "../utils/TitleBlock";
+import axios from "axios";
 
 const LoginPage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -12,6 +13,7 @@ const LoginPage = () => {
   const [errorType, setErrorType] = useState("");
 
   const handleClose = () => {
+    console.log("Closing Modal");
     setIsLoginModalOpen(false);
     setIsCreateUserModalOpen(false);
     setUsername("");
@@ -19,22 +21,26 @@ const LoginPage = () => {
     setEmail("");
     setErrorType("");
   };
-  const handleLogin = (username: string, password: string) => {
-    console.log(username, password);
-    api
-      .post("/users/login/", { username, password })
-      .then((res) => {
-        setUsername("");
-        setPassword("");
-        // Save token and username to local storage
-        localStorage.setItem("token", res.data["token"]);
-        localStorage.setItem("username", username);
-        localStorage.setItem("user_id", res.data["user"].id);
-        window.location.reload();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+
+  const handleLogin = async (username: string, password: string) => {
+    try {
+      const res = await api.post("/users/login/", { username, password });
+      console.log(res.data);
+      setUsername("");
+      setPassword("");
+      // Save token and username to local storage
+      localStorage.setItem("token", res.data["token"]);
+      localStorage.setItem("username", username);
+      localStorage.setItem("user_id", res.data["user"].id);
+      window.location.reload();
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log("Setting Error Type: " + error.response.data);
+        setErrorType(error.response.data);
+      } else {
+        console.error("Unexpected error:", error);
+      }
+    }
   };
 
   const handleCreateUser = async (
@@ -42,16 +48,19 @@ const LoginPage = () => {
     password: string,
     email: string
   ) => {
-    await api
-      .post("/users/register/", { username, password, email })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-        setErrorType(error.response.data);
-        console.log(errorType);
+    try {
+      const res = await api.post("/users/register/", {
+        username,
+        password,
+        email,
       });
+      console.log(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        console.log("Setting Error Type: " + error.response.data);
+        setErrorType(error.response.data);
+      }
+    }
   };
 
   const handleSubmitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -59,13 +68,14 @@ const LoginPage = () => {
     handleLogin(username, password);
   };
 
-  const handleSubmitCreateForm = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmitCreateForm = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
     e.preventDefault();
     handleCreateUser(username, password, email);
-    console.log("Error: ", errorType);
-    if (!errorType || errorType !== "") {
-      console.log("No error");
-      handleLogin(username, password);
+    if (errorType === "") {
+      console.log(errorType, "No error");
+      await handleLogin(username, password);
       handleClose();
       setEmail("");
     } else {
