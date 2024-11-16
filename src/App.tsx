@@ -9,6 +9,7 @@ import { setAuthToken, setUserId } from "./types/api";
 import { useEffect } from "react";
 import NavBar from "./components/home/NavBar";
 import UserSettings from "./components/user/UserSettings";
+import FaithHome from "./components/faith/FaithHome";
 
 function App() {
   useEffect(() => {
@@ -34,6 +35,7 @@ function App() {
               <Route path="/journal/" element={<JournalHome />} />
               <Route path="/todo/" element={<TodoHome />} />
               <Route path="/settings/" element={<UserSettings />} />
+              <Route path="/faith/" element={<FaithHome />} />
             </Routes>
           </BrowserRouter>
         </>

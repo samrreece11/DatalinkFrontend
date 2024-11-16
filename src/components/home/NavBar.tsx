@@ -40,6 +40,9 @@ const NavBar: React.FC = () => {
             <NavItem>
               <NavLink href="/todo/">To Do</NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink href="/faith/">Faith</NavLink>
+            </NavItem>
           </Nav>
           <Nav className="ml-auto" navbar>
             <NavItem>

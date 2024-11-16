@@ -434,6 +434,7 @@ body {
 }
 .flex {
     display: flex;
+    flex-wrap: wrap;
 }
 .font-lg {
     font-size: large;
@@ -569,4 +570,53 @@ body {
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
+}
+.testament-container {
+    /* display: flex;
+    flex-wrap: wrap; */
+}
+.testament {
+    width: 400px;
+}
+.bible-book {
+    background-color: #a7a7a7;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2px 6px;
+    margin: 5px;
+    flex-grow: 1;
+}
+.bible-book:hover,
+.bible-book:focus {
+    background-color: #bbbbbb;
+    cursor: pointer;
+}
+
+.bible-book-option {
+    background-color: #a7a7a7;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 2px 6px;
+    margin: 5px;
+}
+.bible-book-container {
+    text-align: center;
+}
+.border-1 {
+    border: 1px solid black;
+    border-radius: 10px;
+}
+.border-2 {
+    border: 2px solid black;
+    border-radius: 10px;
+}
+.bible-notes {
+    padding: 10px 20px 20px 20px;
+    background-color: #a7a7a7;
+    width: 90%;
+    margin: 10px auto;
+}
+.verse-container {
+    width: 300px;
 }

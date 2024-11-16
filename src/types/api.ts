@@ -2,8 +2,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-    // baseURL: 'http://127.0.0.1:8000/', // Update with your API base URL
-    baseURL: 'https://api.dailysync.net/', // Update with your API base URL
+    baseURL: 'http://127.0.0.1:8000/', // Update with your API base URL
+    // baseURL: 'https://api.dailysync.net/', // Update with your API base URL
 });
 
 let authToken: string | null = null;
