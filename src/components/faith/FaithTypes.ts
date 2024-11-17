@@ -9,9 +9,10 @@ export interface BibleBook {
 
 export interface BibleVerse {
     id: number;
-    book: BibleBook;
+    book: number;
     chapter: number;
     verse: number;
+    endVerse: number | null;
     content: string;
     owner: number;
 }

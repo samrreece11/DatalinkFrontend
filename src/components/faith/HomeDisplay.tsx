@@ -1,12 +1,20 @@
-import { BibleBook } from "./FaithTypes";
+import { BibleBook, BibleVerse } from "./FaithTypes";
 import Title from "../utils/TitleBlock";
 import TestamentContainer from "./TestamentContainer";
+import VerseContainer from "./VerseContainer";
 
 interface Props {
   bibleBooks: BibleBook[];
+  verses: BibleVerse[];
   setCurrentBibleBook: (book: BibleBook) => void;
+  getAllVerses: () => void;
 }
-export function HomeDisplay({ setCurrentBibleBook, bibleBooks }: Props) {
+export function HomeDisplay({
+  setCurrentBibleBook,
+  bibleBooks,
+  verses,
+  getAllVerses,
+}: Props) {
   return (
     <>
       <Title>Faith Home</Title>
@@ -29,14 +37,10 @@ export function HomeDisplay({ setCurrentBibleBook, bibleBooks }: Props) {
           </div>
         </div>
         <div className="verse-container grey-box">
-          <Title>Verses</Title>
-          <div className="verse">
-            <h3>John 3:16</h3>
-            <p>
-              For God so loved the world that he gave his one and only Son, that
-              whoever believes in him shall not perish but have eternal life.
-            </p>
-          </div>
+          <VerseContainer
+            getAllVerses={getAllVerses}
+            verses={verses}
+          ></VerseContainer>
         </div>
       </div>
     </>
