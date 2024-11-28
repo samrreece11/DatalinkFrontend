@@ -1,4 +1,3 @@
-import Title from "../utils/TitleBlock";
 import BibleBookElement from "./BibleBookElement";
 import { BibleBook } from "./FaithTypes";
 
@@ -11,7 +10,7 @@ interface Props {
 const TestamentContainer = ({ children, books, onSelectBook }: Props) => {
   return (
     <div className="testament">
-      <Title>{children}</Title>
+      <h1 className="testament-title">{children}</h1>
       <div className="bible-books flex">
         {books.map((book) => (
           <BibleBookElement onSelectBook={onSelectBook} key={book.id}>

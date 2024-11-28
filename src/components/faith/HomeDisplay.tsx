@@ -36,12 +36,10 @@ export function HomeDisplay({
             </TestamentContainer>
           </div>
         </div>
-        <div className="verse-container grey-box">
-          <VerseContainer
-            getAllVerses={getAllVerses}
-            verses={verses}
-          ></VerseContainer>
-        </div>
+        <VerseContainer
+          onCreate={getAllVerses}
+          verses={verses}
+        ></VerseContainer>
       </div>
     </>
   );

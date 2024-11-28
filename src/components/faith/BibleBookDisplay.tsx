@@ -4,13 +4,18 @@ import "ckeditor5/ckeditor5.css";
 import { Button, Form, FormGroup } from "reactstrap";
 import { editorConfig } from "../utils/CKeditor";
 import { BibleBook, BibleVerse } from "./FaithTypes";
-import { useState } from "react";
+import VerseContainer from "./VerseContainer";
 
 interface Props {
   currentBibleBook: BibleBook;
   setCurrentBibleBook: (book: BibleBook | null) => void;
   handleSubmit: () => void;
   verses: BibleVerse[];
+  notes: string;
+  setNotes: (notes: string) => void;
+  historicNotes: string;
+  setHistoricNotes: (notes: string) => void;
+  onCreate: () => void;
 }
 
 const BibleBookDisplay = ({
@@ -18,12 +23,12 @@ const BibleBookDisplay = ({
   setCurrentBibleBook,
   handleSubmit,
   verses,
+  notes,
+  setNotes,
+  historicNotes,
+  setHistoricNotes,
+  onCreate,
 }: Props) => {
-  const [notes, setNotes] = useState(currentBibleBook?.notes || "");
-  const [historicNotes, setHistoricNotes] = useState(
-    currentBibleBook?.history || ""
-  );
-
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleSubmit();
@@ -67,19 +72,12 @@ const BibleBookDisplay = ({
               </Button>
             </Form>
           </div>
-          <div className="verse-container grey-box">
-            <h4>Verses: </h4>
-            {verses.map((verse) => (
-              <div key={verse.id}>
-                <b>
-                  {verse.chapter}:{verse.verse}
-                  {verse.endVerse && `-${verse.endVerse}`}
-                </b>
-                {": "}
-                {verse.content}
-              </div>
-            ))}
-          </div>
+          <VerseContainer
+            currentBook={currentBibleBook}
+            verses={verses}
+            onCreate={onCreate}
+            long={true}
+          />
         </div>
       </div>
     </>

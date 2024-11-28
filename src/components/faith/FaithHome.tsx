@@ -83,25 +83,30 @@ const FaithHome = () => {
 
   return (
     <>
-      {currentBibleBook ? (
-        <BibleBookDisplay
-          verses={getBookVerses(currentBibleBook.id)}
-          currentBibleBook={currentBibleBook}
-          setCurrentBibleBook={setCurrentBibleBook}
-          handleSubmit={handleSubmit}
-        />
-      ) : (
-        <>
-          <BooksContext.Provider value={bibleBooks}>
+      <BooksContext.Provider value={bibleBooks}>
+        {currentBibleBook ? (
+          <BibleBookDisplay
+            verses={getBookVerses(currentBibleBook.id)}
+            currentBibleBook={currentBibleBook}
+            setCurrentBibleBook={setCurrentBibleBook}
+            notes={notes}
+            setNotes={setNotes}
+            historicNotes={historicNotes}
+            setHistoricNotes={setHistoricNotes}
+            handleSubmit={handleSubmit}
+            onCreate={getAllBibleVerses}
+          />
+        ) : (
+          <>
             <HomeDisplay
               getAllVerses={getAllBibleVerses}
               setCurrentBibleBook={setCurrentBibleBook}
               bibleBooks={bibleBooks}
               verses={verses}
             />
-          </BooksContext.Provider>
-        </>
-      )}
+          </>
+        )}
+      </BooksContext.Provider>
     </>
   );
 };
