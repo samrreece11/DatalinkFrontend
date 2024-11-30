@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Button,
-  Modal as BootstrapModal,
-  ModalHeader,
-  ModalBody,
-  Form,
-} from "reactstrap";
+import { Button, Form } from "reactstrap";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ClassicEditor } from "ckeditor5";
