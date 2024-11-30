@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form } from "reactstrap";
+import { Button, Form, FormGroup, Input } from "reactstrap";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { ClassicEditor } from "ckeditor5";
@@ -16,16 +16,26 @@ interface ModalProps {
 const JournalModal: React.FC<ModalProps> = ({ journal, onClose }) => {
   const [content, setContent] = useState<string>(journal.content);
   const [dropdown, setDropdown] = useState(false);
+  const [title, setTitle] = useState<string>("");
 
   useEffect(() => {
     setContent(journal.content);
+    if (journal.title == "Specific Reflection") {
+      setTitle("");
+    } else {
+      setTitle(journal.title);
+    }
   }, [journal]);
 
   const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (title === "") {
+      setTitle(journal.title);
+    }
     try {
       const response = await api.patch(`/reflections/${journal.id}/`, {
         content: content,
+        title: title,
       });
       console.log("Update successful:", response.data);
       onClose();
@@ -68,16 +78,32 @@ const JournalModal: React.FC<ModalProps> = ({ journal, onClose }) => {
       <div className="reflection-container">
         <div className="reflection">
           <Form>
-            <CKEditor
-              editor={ClassicEditor}
-              config={editorConfig}
-              data={journal.content}
-              onChange={(_event, editor) => {
-                const data = editor.getData();
-                setContent(data);
-                console.log(content);
-              }}
-            />
+            {journal.isSpecific && (
+              <FormGroup>
+                <label>Title</label>
+                <Input
+                  type="text"
+                  required
+                  className="journal-title-form"
+                  value={title}
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                />
+              </FormGroup>
+            )}
+            <FormGroup>
+              <CKEditor
+                editor={ClassicEditor}
+                config={editorConfig}
+                data={journal.content}
+                onChange={(_event, editor) => {
+                  const data = editor.getData();
+                  setContent(data);
+                  console.log(content);
+                }}
+              />
+            </FormGroup>
           </Form>
         </div>
       </div>
