@@ -37,11 +37,12 @@
     flex-wrap: wrap;
 }
 .title {
-    border-bottom: 1px solid black;
     text-align: center;
+    padding: 2px 10px;
 }
 .title_block {
-    padding: 2px 10px;
+    margin: 0px 10px 5px 10px;
+    border-bottom: 1px solid black;
 }
 
 /* for Button.tsx */
@@ -186,7 +187,7 @@ body {
     border: 2px solid black;
     border-radius: 10px;
     text-align: center;
-    flex-grow: 1;
+    /* flex-grow: 1; */
     
 }
 .journal-container {
@@ -661,4 +662,18 @@ body {
     font-size: x-large;
     padding: 10px;
     text-decoration: underline;
+}
+
+.journal-title-form {
+    max-width: 200px;
+    margin: 0 auto;
+    align-self: center; 
+}
+
+.journal-view {
+    text-align: center;
+}
+
+.title-btn {
+    margin-left: 5px;
 }

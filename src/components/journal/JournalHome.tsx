@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import api from "../../types/api";
 import { GroupedJournals, Journal } from "./journalTypes";
 import JournalGroup from "./JournalGroup";
-import JournalModal from "./JournalModal";
 import { Button } from "reactstrap";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
+
+import JournalView from "./JournalView";
 
 const JournalHome = () => {
   const [journals, setJournals] = useState<Journal[]>([]);
@@ -23,9 +25,11 @@ const JournalHome = () => {
     "Dev",
   ];
 
-  const [isJournalModalOpen, setIsJournalModalOpen] = useState<boolean>(false);
+  const [isViewingJournal, setIsViewingJournal] = useState<boolean>(false);
   const [currentJournal, setCurrentJournal] = useState<Journal>({
     id: -1,
+    title: "",
+    isSpecific: false,
     content: "",
     date: "",
   });
@@ -39,7 +43,7 @@ const JournalHome = () => {
   }, [journals]); // Only runs on first render
 
   const refreshList = async () => {
-    api.get("/journals/").then((res) => setJournals(res.data));
+    api.get("/reflections/").then((res) => setJournals(res.data));
   };
 
   const groupByMonthYear = (journals: Journal[]): GroupedJournals => {
@@ -48,6 +52,9 @@ const JournalHome = () => {
       const dateA = new Date(a.date).getTime(); // Convert to timestamp
       const dateB = new Date(b.date).getTime(); // Convert to timestamp
       return dateB - dateA; // Sort in ascending order (earliest first)
+    });
+    sortedJournals.sort((a, b) => {
+      return Number(b.isSpecific) - Number(a.isSpecific);
     });
 
     sortedJournals.forEach((journal) => {
@@ -60,33 +67,48 @@ const JournalHome = () => {
       }
       grouped[monthYear].push(journal);
     });
+
     return grouped;
   };
 
-  const handleOpenJournalModal = (journal: Journal) => {
-    setCurrentJournal(journal);
-    setIsJournalModalOpen(true);
-  };
-
-  const openOrCreateJournal = async () => {
+  const openOrCreateDailyReflection = async () => {
+    console.log("Opening or creating daily reflection");
     const today = new Date().toLocaleDateString("en-CA", {
       timeZone: "America/New_York",
     });
-    const existingJournal = journals.find((journal) => journal.date === today);
+    const existingJournal = journals.find(
+      (journal) => journal.date === today && !journal.isSpecific
+    );
     if (existingJournal) {
-      handleOpenJournalModal(existingJournal);
+      viewJournal(existingJournal);
     } else {
-      handleOpenJournalModal(await createJournal({ date: today, content: "" }));
+      viewJournal(await createJournal({ date: today, content: "" }));
     }
     console.log(journals);
+  };
+
+  const openSpecificReflection = async () => {
+    const today = new Date().toLocaleDateString("en-CA", {
+      timeZone: "America/New_York",
+    });
+    viewJournal(
+      await createJournal({
+        date: today,
+        content: "",
+        isSpecific: true,
+        title: "Specific Reflection",
+      })
+    );
   };
 
   const createJournal = async (journalData: {
     date: string;
     content: string;
+    isSpecific?: boolean;
+    title?: string;
   }) => {
     try {
-      const response = await api.post("/journals/", journalData);
+      const response = await api.post("/reflections/", journalData);
       console.log("Journal created:", response.data);
       await refreshList();
       return response.data;
@@ -96,39 +118,83 @@ const JournalHome = () => {
     }
   };
 
+  const viewJournal = (journal: Journal) => {
+    setCurrentJournal(journal);
+    setIsViewingJournal(true);
+  };
+
+  const handleCloseViewJournal = () => {
+    refreshList();
+    setIsViewingJournal(false);
+  };
+
   return (
     <>
-      <div className="title_block">
-        <h1 className="title">
-          Journal
-          <Button
-            className="journal-btn"
-            color="secondary"
-            onClick={openOrCreateJournal}
-          >
-            Today's Journal
-          </Button>
-        </h1>
-      </div>
-
-      <div className="journal-main">
-        {Object.entries(groupedJournals).map(([monthYear, journals]) => (
-          <JournalGroup
-            key={monthYear}
-            journals={journals}
-            monthYear={monthYear}
-            onClick={handleOpenJournalModal}
-          />
-        ))}
-      </div>
-      <div className="modal-cont">
-        <JournalModal
-          refresh={refreshList}
+      {isViewingJournal ? (
+        <JournalView
           journal={currentJournal}
-          isOpen={isJournalModalOpen}
-          onClose={() => setIsJournalModalOpen(false)}
-        />
-      </div>
+          onClose={() => handleCloseViewJournal()}
+        ></JournalView>
+      ) : (
+        <>
+          <div className="title_block">
+            <h1 className="title">
+              Reflections
+              <Menu>
+                <MenuButton
+                  as={Button}
+                  color="secondary"
+                  className="journal-btn"
+                >
+                  Add Reflection
+                </MenuButton>
+                <MenuItems>
+                  <MenuItem>
+                    <Button
+                      className="journal-btn"
+                      color="secondary"
+                      onClick={openSpecificReflection}
+                    >
+                      Specific Reflection
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      className="journal-btn"
+                      color="secondary"
+                      onClick={openOrCreateDailyReflection}
+                    >
+                      Today's Reflection
+                    </Button>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
+            </h1>
+          </div>
+
+          <div className="journal-main">
+            {Object.entries(groupedJournals).map(([monthYear, journals]) => {
+              let isCurrentMonth = false;
+              const currentMonthYear = `${
+                months[new Date().getUTCMonth()]
+              } ${new Date().getUTCFullYear()}`;
+              if (monthYear === currentMonthYear) {
+                isCurrentMonth = true;
+              }
+              return (
+                <JournalGroup
+                  key={monthYear}
+                  journals={journals}
+                  monthYear={monthYear}
+                  onClick={viewJournal}
+                  isCurrentMonth={isCurrentMonth}
+                  handleOpenReflection={openOrCreateDailyReflection}
+                />
+              );
+            })}
+          </div>
+        </>
+      )}
     </>
   );
 };
