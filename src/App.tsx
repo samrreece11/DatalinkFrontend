@@ -5,7 +5,7 @@ import JournalHome from "./components/journal/JournalHome";
 import HomePage from "./components/home/HomePage";
 import TodoHome from "./components/todo/TodoHome";
 import LoginPage from "./components/user/LoginPage";
-import { setAuthToken, setUserId } from "./types/api";
+import { setAuthToken } from "./types/api";
 import { useEffect } from "react";
 import NavBar from "./components/home/NavBar";
 import UserSettings from "./components/user/UserSettings";
@@ -14,12 +14,8 @@ import FaithHome from "./components/faith/FaithHome";
 function App() {
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("user_id");
     if (token) {
       setAuthToken();
-    }
-    if (userId) {
-      setUserId();
     }
   }, []);
 

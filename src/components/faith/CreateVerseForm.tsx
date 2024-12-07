@@ -17,7 +17,7 @@ const CreateVerseForm = ({
   currentBook,
 }: Props) => {
   const bibleBooks = useContext(BooksContext);
-  const [selectedBook, setSelectedBook] = useState(currentBook?.name || "");
+  const [selectedBook, setSelectedBook] = useState(currentBook?.title || "");
   const [chapter, setChapter] = useState("");
   const [verse, setVerse] = useState("");
   const [content, setContent] = useState("");
@@ -48,7 +48,7 @@ const CreateVerseForm = ({
   };
 
   const bookToId = (bookName: string) => {
-    const book = bibleBooks.find((book) => book.name === bookName);
+    const book = bibleBooks.find((book) => book.title === bookName);
     return book ? book.id : 0;
   };
 
@@ -96,8 +96,8 @@ const CreateVerseForm = ({
             Select Book
           </option>
           {bibleBooks.map((book) => (
-            <option key={book.id} value={book.name}>
-              {book.name}
+            <option key={book.id} value={book.title}>
+              {book.title}
             </option>
           ))}
         </Input>
