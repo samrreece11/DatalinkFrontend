@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Book, Action, Quote } from "./libraryTypes";
+import { Book, Action } from "./libraryTypes";
 
 import BookGroup from "./BookGroup";
 import EditBookModal from "./BookModal";
@@ -14,7 +14,6 @@ import BookReflectModal from "./ReflectModal";
 
 function Library() {
   const [books, setBooks] = useState<Book[]>([]);
-  const [quotes, setQuotes] = useState<Quote[]>([]);
 
   // Modal Handling
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -22,33 +21,10 @@ function Library() {
   const [isCreateQuoteModalOpen, setIsCreateQuoteModalOpen] =
     useState<boolean>(false);
   const [isReflectModalOpen, setIsReflectModalOpen] = useState<boolean>(false);
-
   const [IsViewQuoteModalOpen, setIsViewQuoteModalOpen] =
     useState<boolean>(false);
-  const [bookForQuoteModal, setBookForQuoteModal] = useState<Book>({
-    id: -1,
-    title: "",
-    author: "",
-    pageNumbers: 0,
-    bought: false,
-    reading: false,
-    read: false,
-    reflection: "",
-    startDate: "",
-    endDate: "",
-  });
-  const [initialData, setInitialData] = useState<Book>({
-    id: -1,
-    title: "",
-    author: "",
-    pageNumbers: 0,
-    bought: false,
-    reading: false,
-    read: false,
-    reflection: "",
-    startDate: "",
-    endDate: "",
-  });
+  const [bookForQuoteModal, setBookForQuoteModal] = useState<Book>({} as Book);
+  const [initialData, setInitialData] = useState<Book>({} as Book);
 
   useEffect(() => {
     refreshList();
@@ -57,8 +33,7 @@ function Library() {
   // Updates db
   const updateBook = async (book: Book) => {
     try {
-      const response = await api.put(`/books/${book.id}/`, book);
-      console.log("Update successful:", response.data);
+      await api.put(`/books/${book.id}/`, book);
       refreshList();
     } catch (error) {
       console.error("Error updating book:", error);
@@ -68,10 +43,8 @@ function Library() {
 
   // Update db. Only takes in Title and Author
   const createBook = async (bookData: { title: string; author: string }) => {
-    console.log("Creating book... ", bookData);
     try {
-      const response = await api.post("/books/", bookData);
-      console.log("Book created:", response.data);
+      await api.post("/books/", bookData);
       refreshList();
     } catch (error) {
       console.error("Error creating book:", error);
@@ -81,7 +54,6 @@ function Library() {
 
   // Moves book to next bin based on current status. Calls updateBookInDB
   const moveBook = async (book: Book) => {
-    console.log("Moving Book: ", book);
     if (!book.bought) {
       // Move to Bought
       book.bought = true;
@@ -106,13 +78,10 @@ function Library() {
     contents: string;
     book: number;
   }) => {
-    console.log("Creating Quote... ", quoteData);
     try {
-      const response = await api.post("/quotes/", quoteData);
-      console.log("Quote created:", response.data);
+      await api.post("/quotes/", quoteData);
       refreshList();
     } catch (error) {
-      console.error("Error creating quote:", error);
       // Handle error (e.g., show notification to user)
     }
   };
@@ -120,7 +89,6 @@ function Library() {
   // API request to list of books
   const refreshList = () => {
     api.get("/books/").then((res) => setBooks(res.data));
-    api.get("/quotes/").then((res) => setQuotes(res.data));
   };
 
   const handleDeleteBook = (book: Book) => {
@@ -154,10 +122,6 @@ function Library() {
   const handleCreateQuoteModal = (book: Book) => {
     setBookForQuoteModal(book);
     setIsCreateQuoteModalOpen(true);
-  };
-
-  const getBookQuotes = (currentBook: Book) => {
-    return quotes.filter((quote) => quote.book == currentBook.id);
   };
 
   const handleViewQuotes = (book: Book) => {
@@ -214,7 +178,6 @@ function Library() {
       name: "Edit",
       action: (book: Book) => handleOpenEditBookModal(book),
     },
-
     {
       name: "View Quotes",
       action: (book: Book) => handleViewQuotes(book),
@@ -271,41 +234,50 @@ function Library() {
           Read
         </BookGroup>
       </div>
-      <div id="modal-container">
-        <EditBookModal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          editBook={initialData}
-          onSave={updateBook}
-          onDelete={handleDeleteBook}
-        />
-        <CreateBookModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          onCreate={createBook}
-        />
-        <CreateQuoteModal
-          book={bookForQuoteModal}
-          isOpen={isCreateQuoteModalOpen}
-          onClose={() => setIsCreateQuoteModalOpen(false)}
-          onCreate={createQuote}
-        />
-        <ViewQuoteModal
-          refresh={refreshList}
-          book={bookForQuoteModal}
-          quotes={getBookQuotes(bookForQuoteModal)}
-          isOpen={IsViewQuoteModalOpen}
-          onClose={() => setIsViewQuoteModalOpen(false)}
-          createQuote={handleCreateQuoteModal}
-        />
-        <BookReflectModal
-          book={bookForQuoteModal}
-          isOpen={isReflectModalOpen}
-          onClose={() => {
-            setIsReflectModalOpen(false);
-            refreshList();
-          }}
-        />
+      <div className="modal-container">
+        {isEditModalOpen && (
+          <EditBookModal
+            isOpen={isEditModalOpen}
+            onClose={() => setIsEditModalOpen(false)}
+            editBook={initialData}
+            onSave={updateBook}
+            onDelete={handleDeleteBook}
+          />
+        )}
+        {isCreateModalOpen && (
+          <CreateBookModal
+            isOpen={isCreateModalOpen}
+            onClose={() => setIsCreateModalOpen(false)}
+            onCreate={createBook}
+          />
+        )}
+        {isCreateQuoteModalOpen && (
+          <CreateQuoteModal
+            book={bookForQuoteModal}
+            isOpen={isCreateQuoteModalOpen}
+            onClose={() => setIsCreateQuoteModalOpen(false)}
+            onCreate={createQuote}
+          />
+        )}
+        {IsViewQuoteModalOpen && (
+          <ViewQuoteModal
+            refresh={refreshList}
+            book={bookForQuoteModal}
+            isOpen={IsViewQuoteModalOpen}
+            onClose={() => setIsViewQuoteModalOpen(false)}
+            createQuote={handleCreateQuoteModal}
+          />
+        )}
+        {isReflectModalOpen && (
+          <BookReflectModal
+            book={bookForQuoteModal}
+            isOpen={isReflectModalOpen}
+            onClose={() => {
+              setIsReflectModalOpen(false);
+              refreshList();
+            }}
+          />
+        )}
       </div>
     </>
   );

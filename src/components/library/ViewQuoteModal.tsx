@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Modal as BootstrapModal,
@@ -8,10 +8,10 @@ import {
 } from "reactstrap";
 import { Book, Quote } from "./libraryTypes";
 import QuoteContainer from "./QuoteContainer";
+import { getQuotesByBook } from "./LibraryUtils";
 
 interface ModalProps {
   book: Book;
-  quotes: Quote[];
   isOpen: boolean;
   onClose: () => void;
   createQuote: (book: Book) => void;
@@ -20,15 +20,19 @@ interface ModalProps {
 
 const ViewQuoteModal: React.FC<ModalProps> = ({
   book,
-  quotes,
   isOpen,
   onClose,
   createQuote,
   refresh,
 }) => {
-  const handleDoubleClick = () => {
-    console.log("Double Click");
+  const getQuotes = async () => {
+    setQuotes(await getQuotesByBook(book.id));
   };
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+
+  useEffect(() => {
+    getQuotes();
+  }, [isOpen]);
 
   return (
     <BootstrapModal
@@ -46,7 +50,7 @@ const ViewQuoteModal: React.FC<ModalProps> = ({
       </ModalHeader>
       <ModalBody>
         {/* Consider making into a componenet */}
-        <div onDoubleClick={handleDoubleClick} className="quote-group">
+        <div className="quote-group">
           {quotes.map((quote, index) => (
             <QuoteContainer
               refresh={refresh}

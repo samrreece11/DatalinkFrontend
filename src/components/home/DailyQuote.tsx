@@ -1,89 +1,33 @@
 import { useEffect, useState } from "react";
-import { DailyQuote } from "./HomeTypes";
+import { Quote } from "../library/libraryTypes";
 import api from "../../types/api";
-import { Book, Quote } from "../library/libraryTypes";
 
 const DailyQuoteDisplay = () => {
-  const [dailyQuotes, setDailyQuotes] = useState<DailyQuote[]>([]);
-  const [quotes, setQuotes] = useState<Quote[]>([]);
-  const [books, setBooks] = useState<Book[]>([]);
-  const [currentDailyQuote, setCurrentDailyQuote] = useState<Quote>({
-    id: -1,
-    contents: "",
-    pageNum: -1,
-    book: -1,
-  });
+  // State of current daily quote
+  const [currentDailyQuote, setCurrentDailyQuote] = useState<Quote>(
+    {} as Quote
+  );
 
-  useEffect(() => {
-    refreshList();
-  }, []); // Only runs on first render
-
-  useEffect(() => {
-    getOrCreateDailyQuote();
-  }); // Runs on every render
-
-  const refreshList = () => {
-    api
-      .get("/dailyquotes/")
-      .then((response) => {
-        setDailyQuotes(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    api.get("/quotes/").then((response) => {
-      setQuotes(response.data);
-    });
-    api.get("/books/").then((response) => {
-      setBooks(response.data);
-    });
-  };
-
+  // Makes an API call to the backend to get the daily quote
   const getOrCreateDailyQuote = async () => {
-    const today = new Date().toLocaleDateString("en-CA", {
-      timeZone: "America/New_York",
-    });
-    const currentDailyQuote = dailyQuotes.find(
-      (dailyQuote) => dailyQuote.date === today
-    );
-    if (currentDailyQuote) {
-      setCurrentDailyQuote(IdToQuote(currentDailyQuote.quote));
-    } else {
-      const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-      const response = await api.post("/dailyquotes/", {
-        quote: randomQuote.id,
-        date: today,
-      });
-      setCurrentDailyQuote(IdToQuote(response.data.quote));
+    // String date format: "YYYY-MM-DD"
+    try {
+      const res = await api.get("/dailyquotes/get-or-create/");
+      return res.data;
+    } catch (error) {
+      console.log(error);
     }
   };
 
-  const IdToQuote = (id: number): Quote => {
-    const quote = quotes.find((quote) => quote.id === id);
-    if (quote) {
-      return quote;
-    }
-    return { id: -1, contents: "", pageNum: -1, book: -1 };
+  // Function to get the daily quote
+  const getDailyQuote = async () => {
+    setCurrentDailyQuote(await getOrCreateDailyQuote());
   };
 
-  const IdToBook = (id: number): Book => {
-    const book = books.find((book) => book.id === id);
-    if (book) {
-      return book;
-    }
-    return {
-      id: -1,
-      title: "",
-      author: "",
-      pageNumbers: 0,
-      bought: false,
-      reading: false,
-      read: false,
-      reflection: "",
-      startDate: "",
-      endDate: "",
-    };
-  };
+  // Fetches the daily quote on component mount
+  useEffect(() => {
+    getDailyQuote();
+  }, []); // Only runs on first render
 
   return (
     <>
@@ -95,8 +39,8 @@ const DailyQuoteDisplay = () => {
         {currentDailyQuote.contents ? (
           <div>
             "{currentDailyQuote.contents}" - By{" "}
-            <i>{IdToBook(currentDailyQuote.book).author}</i>,{" "}
-            {IdToBook(currentDailyQuote.book).title}{" "}
+            <i>{currentDailyQuote.book.author}</i>,{" "}
+            {currentDailyQuote.book.title}{" "}
           </div>
         ) : (
           <div>

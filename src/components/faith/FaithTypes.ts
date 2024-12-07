@@ -1,6 +1,6 @@
 export interface BibleBook {
     id: number;
-    name: string;
+    title: string;
     isOldTestament: boolean;
     notes: string;
     history: string;
@@ -9,7 +9,7 @@ export interface BibleBook {
 
 export interface BibleVerse {
     id: number;
-    book: number;
+    book: {title: string};
     chapter: number;
     verse: number;
     endVerse: number | null;
@@ -17,12 +17,12 @@ export interface BibleVerse {
     owner: number;
 }
 
-export interface DailyVerse {
-    id: number;
-    verse: BibleVerse;
-    date: string; // ISO 8601 date string
-    owner: number;
-}
+// export interface DailyVerse {
+//     id: number;
+//     verse: BibleVerse;
+//     date: string; // ISO 8601 date string
+//     owner: number;
+// }
 
 export interface Prayer {
     id: number;

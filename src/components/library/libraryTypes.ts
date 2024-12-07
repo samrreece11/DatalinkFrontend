@@ -15,7 +15,7 @@ export interface Quote {
   id: number;
   pageNum: number;
   contents: string;
-  book: number;
+  book: Book;
 }
 
 export interface Action {

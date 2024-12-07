@@ -677,3 +677,7 @@ body {
 .title-btn {
     margin-left: 5px;
 }
+
+.daily-verse {
+    max-width: 300px;
+}

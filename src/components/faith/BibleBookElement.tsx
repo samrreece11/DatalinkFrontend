@@ -8,7 +8,7 @@ const BibleBookElement = ({ children, onSelectBook }: Props) => {
   return (
     <>
       <div onClick={() => onSelectBook(children)} className="bible-book">
-        {children.name}
+        {children.title}
       </div>
     </>
   );

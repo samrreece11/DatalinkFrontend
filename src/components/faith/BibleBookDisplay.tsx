@@ -39,7 +39,7 @@ const BibleBookDisplay = ({
       <div className="bible-book-container">
         <div className="title-block">
           <h3 className="title">
-            {currentBibleBook.name}
+            {currentBibleBook.title}
             <Button onClick={() => setCurrentBibleBook(null)}>Back</Button>
           </h3>
         </div>

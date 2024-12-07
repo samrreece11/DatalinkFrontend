@@ -2,8 +2,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-    // baseURL: 'http://127.0.0.1:8000/', // Update with your API base URL
-    baseURL: 'https://api.dailysync.net/', // Update with your API base URL
+    baseURL: 'http://127.0.0.1:8000/', // Update with your API base URL
+    // baseURL: 'https://api.dailysync.net/', // Update with your API base URL
 });
 
 let authToken: string | null = null;
@@ -22,15 +22,15 @@ api.interceptors.request.use(
         if (authToken) {
             config.headers['Authorization'] = `Token ${authToken}`;
         }
-        if (userId !== null) {
-            if (config.method === 'get') {
-                // Add owner to params for GET requests
-                config.params = { ...config.params, owner: userId };
-            } else if (config.method === 'post' || config.method === 'put' || config.method === 'delete') {
-                // Add owner to data for POST, PUT, and DELETE requests
-                config.data = { ...config.data, owner: userId };
-            }
-        }
+        // if (userId !== null) {
+        //     if (config.method === 'get') {
+        //         // Add owner to params for GET requests
+        //         config.params = { ...config.params, owner: userId };
+        //     } else if (config.method === 'post' || config.method === 'put' || config.method === 'delete') {
+        //         // Add owner to data for POST, PUT, and DELETE requests
+        //         config.data = { ...config.data, owner: userId };
+        //     }
+        // }
 
         const csrfToken = Cookies.get('csrftoken');
         if (csrfToken) {

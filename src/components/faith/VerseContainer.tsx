@@ -1,8 +1,7 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { BibleBook, BibleVerse } from "./FaithTypes";
 import VerseElement from "./VerseElement";
 import { Button } from "reactstrap";
-import { BooksContext } from "./FaithHome";
 import api from "../../types/api";
 import CreateVerseForm from "./CreateVerseForm";
 import VerseElementLong from "./VerseElementLong";
@@ -17,7 +16,6 @@ interface Props {
 const VerseContainer = ({ verses, onCreate, long, currentBook }: Props) => {
   long = long || false;
   const [isAddingVerse, setIsAddingVerse] = useState(false);
-  const bibleBooks = useContext(BooksContext);
   const [viewVerse, setViewVerse] = useState<BibleVerse | null>(null);
 
   const handleDeleteVerse = async () => {
@@ -59,8 +57,7 @@ const VerseContainer = ({ verses, onCreate, long, currentBook }: Props) => {
           <br />
           <div className="view-verse">
             <b>
-              {bibleBooks.find((book) => book.id === viewVerse.book)?.name}{" "}
-              {viewVerse.chapter}:{viewVerse.verse}
+              {viewVerse.book.title} {viewVerse.chapter}:{viewVerse.verse}
               {viewVerse.endVerse && `-${viewVerse.endVerse}`}
             </b>
             {": "}
