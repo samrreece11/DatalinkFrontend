@@ -38,7 +38,7 @@ const DailyVerseDisplay = () => {
           <p>{currentDailyVerse.content}</p>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p>No Daily Verses Found... Try adding some in Faith Section!</p>
       )}
     </div>
   );

@@ -1,9 +1,9 @@
-import { useContext, useState } from "react";
+import { useEffect, useState } from "react";
 import { Form, Input, FormGroup, Button } from "reactstrap";
-import { BooksContext } from "./FaithHome";
 import { bibleApi } from "./BibleApi";
 import api from "../../types/api";
 import { BibleBook } from "./FaithTypes";
+import { getBibleBooks } from "./FaithUtils";
 
 interface Props {
   setIsAddingVerse: (isAddingVerse: boolean) => void;
@@ -16,7 +16,7 @@ const CreateVerseForm = ({
   setIsAddingVerse,
   currentBook,
 }: Props) => {
-  const bibleBooks = useContext(BooksContext);
+  const [bibleBooks, setBibleBooks] = useState<BibleBook[]>([]);
   const [selectedBook, setSelectedBook] = useState(currentBook?.title || "");
   const [chapter, setChapter] = useState("");
   const [verse, setVerse] = useState("");
@@ -25,7 +25,7 @@ const CreateVerseForm = ({
   const [isCreatingOwnVerse, setIsCreatingOwnVerse] = useState(false);
 
   const createVerse = async (
-    book: number,
+    book: { title: string },
     chapter: number,
     verse: number,
     verseEnd: number | null,
@@ -47,10 +47,13 @@ const CreateVerseForm = ({
     onCreate();
   };
 
-  const bookToId = (bookName: string) => {
-    const book = bibleBooks.find((book) => book.title === bookName);
-    return book ? book.id : 0;
+  const getBooks = async () => {
+    setBibleBooks(await getBibleBooks());
   };
+
+  useEffect(() => {
+    getBooks();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,7 +62,7 @@ const CreateVerseForm = ({
     const verseStart = parseInt(verseArr[0]);
     const verseEnd = parseInt(verseArr[1]) || null;
     console.log(verseEnd);
-    const book = bookToId(selectedBook);
+    const book = { title: selectedBook };
     const chapterId = parseInt(chapter);
     if (!isCreatingOwnVerse) {
       const queryString = `${selectedBook} ${chapter}:${verse}`;

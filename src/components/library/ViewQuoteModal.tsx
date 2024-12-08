@@ -44,9 +44,7 @@ const ViewQuoteModal: React.FC<ModalProps> = ({
       id="quote-modal"
     >
       <ModalHeader toggle={onClose}>
-        <h1>
-          Quotes for <i>{book.title}</i> by {book.author}:
-        </h1>
+        Quotes for <i>{book.title}</i> by {book.author}:
       </ModalHeader>
       <ModalBody>
         {/* Consider making into a componenet */}

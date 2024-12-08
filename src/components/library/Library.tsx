@@ -78,10 +78,12 @@ function Library() {
     contents: string;
     book: number;
   }) => {
+    console.log(quoteData);
     try {
       await api.post("/quotes/", quoteData);
       refreshList();
     } catch (error) {
+      console.error("Error creating quote:", error);
       // Handle error (e.g., show notification to user)
     }
   };

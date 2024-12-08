@@ -23,6 +23,16 @@ export const getBookById = async (id: number): Promise<BibleBook> => {
     );
   };
 
+export const getBibleBooks = async (): Promise<BibleBook[]> => {
+    try {
+      const res = await api.get("/faith/books/");
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+    return [];
+  }
+
 export const idToVerse = async (id: number) => {
     return await getVerseById(id);
   };
