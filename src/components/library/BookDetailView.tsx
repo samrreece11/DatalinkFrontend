@@ -1,38 +1,29 @@
 import React, { useState, useEffect } from "react";
-import {
-  Button,
-  Modal as BootstrapModal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Form,
-  FormGroup,
-  Input,
-  Label,
-} from "reactstrap";
+import { Button, Form, FormGroup, Input, Label } from "reactstrap";
 import { Book } from "./libraryTypes";
+import api from "../../types/api";
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  editBook: Book;
-  onSave: (book: Book) => void;
-  onDelete: (book: Book) => void;
+interface Props {
+  book: Book;
+  refresh: () => void;
 }
+const BookDetailView = ({ book, refresh }: Props) => {
+  const [formData, setFormData] = useState<Book>(book);
 
-const EditBookModal: React.FC<ModalProps> = ({
-  isOpen,
-  onClose,
-  editBook,
-  onSave,
-  onDelete,
-}) => {
-  const [formData, setFormData] = useState<Book>(editBook);
-
-  // Update formData when the modal opens or editBook changes
+  // Update formData when the modal opens or book changes
   useEffect(() => {
-    setFormData(editBook);
-  }, [isOpen, editBook]);
+    setFormData(book);
+  }, [book]);
+
+  const updateBook = async (book: Book) => {
+    try {
+      await api.put(`/books/${book.id}/`, formData);
+      refresh();
+    } catch (error) {
+      console.error("Error updating book:", error);
+      // Handle error (e.g., show a notification)
+    }
+  };
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,23 +41,31 @@ const EditBookModal: React.FC<ModalProps> = ({
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Submitting Form");
-    onSave(formData);
-    onClose();
+    updateBook(formData);
   };
 
   // Handle deletion
   const handleDelete = () => {
-    onDelete(formData);
-    onClose();
+    handleDeleteBook(formData);
   };
 
-  // If the modal isn't open, return null
-  if (!isOpen) return null;
+  const handleDeleteBook = (book: Book) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this book?"
+    );
+    if (confirmDelete) {
+      api
+        .delete(`/books/${book.id}/`)
+        .then(() => refresh())
+        .catch((error) => {
+          console.error("There was an error deleting the book!", error);
+        });
+    }
+  };
 
   return (
-    <BootstrapModal scrollable={true} isOpen={isOpen} toggle={onClose}>
-      <ModalHeader toggle={onClose}>Edit Book</ModalHeader>
-      <ModalBody>
+    <>
+      <div className="book-detail-form">
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label for="title">Title</Label>
@@ -165,18 +164,16 @@ const EditBookModal: React.FC<ModalProps> = ({
               }}
             />
           </FormGroup>
-          <ModalFooter>
-            <Button color="success" type="submit">
-              Save
-            </Button>
-            <Button color="danger" onClick={handleDelete}>
-              Delete Book
-            </Button>
-          </ModalFooter>
+          <Button color="success" type="submit">
+            Save
+          </Button>
+          <Button color="danger" onClick={handleDelete}>
+            Delete
+          </Button>
         </Form>
-      </ModalBody>
-    </BootstrapModal>
+      </div>
+    </>
   );
 };
 
-export default EditBookModal;
+export default BookDetailView;

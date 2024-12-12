@@ -1,8 +1,6 @@
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { ClassicEditor } from "ckeditor5";
 import "ckeditor5/ckeditor5.css";
 import { Button, Form, FormGroup } from "reactstrap";
-import { editorConfig } from "../utils/CKeditor";
+import CKEditorBox from "../utils/CKEditorBox";
 import { BibleBook, BibleVerse } from "./FaithTypes";
 import VerseContainer from "./VerseContainer";
 
@@ -49,22 +47,13 @@ const BibleBookDisplay = ({
             <h4>Notes: </h4>
             <Form onSubmit={onSubmit}>
               <FormGroup>
-                <CKEditor
-                  editor={ClassicEditor}
-                  config={editorConfig}
-                  data={notes}
-                  onChange={(_event, editor) => setNotes(editor.getData())}
-                />
+                <CKEditorBox input={notes} handleSave={setNotes} />
               </FormGroup>
               <FormGroup>
                 <h4>Historic Notes: </h4>
-                <CKEditor
-                  editor={ClassicEditor}
-                  config={editorConfig}
-                  data={historicNotes}
-                  onChange={(_event, editor) =>
-                    setHistoricNotes(editor.getData())
-                  }
+                <CKEditorBox
+                  input={historicNotes}
+                  handleSave={setHistoricNotes}
                 />
               </FormGroup>
               <Button color="success" size="lg" type="submit">

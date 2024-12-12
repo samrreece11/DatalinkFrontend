@@ -1,22 +1,11 @@
-import React, { useEffect, useState } from "react";
 import {
-  Button,
-  Modal as BootstrapModal,
-  ModalHeader,
-  ModalBody,
-  Form,
-} from "reactstrap";
-import { Book } from "./libraryTypes";
-
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import {
-  ClassicEditor,
   AccessibilityHelp,
   Autoformat,
   AutoImage,
   Autosave,
   BlockQuote,
   Bold,
+  ClassicEditor,
   CloudServices,
   Essentials,
   FontBackgroundColor,
@@ -54,21 +43,16 @@ import {
   Undo,
 } from "ckeditor5";
 import "ckeditor5/ckeditor5.css";
-import api from "../../types/api";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 
-interface ModalProps {
-  book: Book;
-  isOpen: boolean;
-  onClose: () => void;
+import { useState } from "react";
+import { Button } from "reactstrap";
+
+interface Props {
+  input: string;
+  handleSave: (output: string) => void;
 }
-
-const BookReflectModal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
-  const [content, setContent] = useState<string>(book.reflection);
-
-  useEffect(() => {
-    setContent(book.reflection);
-  }, [book]);
-
+const CKEditorBox = ({ input, handleSave }: Props) => {
   const editorConfig = {
     toolbar: {
       items: [
@@ -171,60 +155,33 @@ const BookReflectModal: React.FC<ModalProps> = ({ book, isOpen, onClose }) => {
     },
   };
 
-  const handleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    try {
-      const response = await api.patch(`/books/${book.id}/`, {
-        reflection: content,
-      });
-      console.log("Update successful:", response.data);
-      onClose();
-    } catch (error) {
-      console.error("Error updating book:", error);
-      // Handle error (e.g., show a notification)
-    }
-  };
+  const [content, setContent] = useState<string>(input);
 
-  if (!isOpen) return null;
   return (
-    <BootstrapModal
-      className="reflect-modal"
-      scrollable={true}
-      fullscreen={true}
-      isOpen={isOpen}
-      toggle={onClose}
-    >
-      <ModalHeader toggle={onClose}>
-        <h1>Reflection for {book.title}</h1>
-      </ModalHeader>
-      <ModalBody>
-        <div className="reflection-container">
-          <div className="reflection">
-            <Form>
-              <CKEditor
-                editor={ClassicEditor}
-                config={editorConfig}
-                data={book.reflection}
-                onChange={(_event, editor) => {
-                  const data = editor.getData();
-                  setContent(data);
-                }}
-              />
-            </Form>
-          </div>
+    <>
+      <div className="editor-box">
+        <div className="editor-container">
+          <CKEditor
+            editor={ClassicEditor}
+            config={editorConfig}
+            data={content}
+            onChange={(_event, editor) => {
+              const data = editor.getData();
+              setContent(data);
+            }}
+          />
         </div>
         <Button
-          type="submit"
+          onClick={() => handleSave(content)}
           color="success"
           size="lg"
           className="save-btn"
-          onClick={(event) => handleSubmit(event)}
         >
           Save
         </Button>
-      </ModalBody>
-    </BootstrapModal>
+      </div>
+    </>
   );
 };
 
-export default BookReflectModal;
+export default CKEditorBox;

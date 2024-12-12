@@ -1,30 +1,17 @@
 import { useEffect, useState } from "react";
 import { Book, Action } from "./libraryTypes";
-
 import BookGroup from "./BookGroup";
-import EditBookModal from "./BookModal";
 import api from "../../types/api";
 import Button from "../Button";
-import CreateBookModal from "./BookCreateModal";
-import CreateQuoteModal from "./CreateQuoteModal";
-import ViewQuoteModal from "./ViewQuoteModal";
-import BookReflectModal from "./ReflectModal";
+import BookView from "./BookView";
+import { getBookById } from "./LibraryUtils";
 
 // Define the type for the items
 
 function Library() {
   const [books, setBooks] = useState<Book[]>([]);
-
-  // Modal Handling
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
-  const [isCreateQuoteModalOpen, setIsCreateQuoteModalOpen] =
-    useState<boolean>(false);
-  const [isReflectModalOpen, setIsReflectModalOpen] = useState<boolean>(false);
-  const [IsViewQuoteModalOpen, setIsViewQuoteModalOpen] =
-    useState<boolean>(false);
-  const [bookForQuoteModal, setBookForQuoteModal] = useState<Book>({} as Book);
-  const [initialData, setInitialData] = useState<Book>({} as Book);
+  const [viewingBook, setViewingBook] = useState<Book>({} as Book);
+  const [title, setTitle] = useState<string>("Library");
 
   useEffect(() => {
     refreshList();
@@ -38,17 +25,6 @@ function Library() {
     } catch (error) {
       console.error("Error updating book:", error);
       // Handle error (e.g., show a notification)
-    }
-  };
-
-  // Update db. Only takes in Title and Author
-  const createBook = async (bookData: { title: string; author: string }) => {
-    try {
-      await api.post("/books/", bookData);
-      refreshList();
-    } catch (error) {
-      console.error("Error creating book:", error);
-      // Handle error (e.g., show notification to user)
     }
   };
 
@@ -73,74 +49,38 @@ function Library() {
     refreshList();
   };
 
-  const createQuote = async (quoteData: {
-    pageNum: number;
-    contents: string;
-    book: number;
-  }) => {
-    console.log(quoteData);
-    try {
-      await api.post("/quotes/", quoteData);
-      refreshList();
-    } catch (error) {
-      console.error("Error creating quote:", error);
-      // Handle error (e.g., show notification to user)
-    }
-  };
-
   // API request to list of books
-  const refreshList = () => {
-    api.get("/books/").then((res) => setBooks(res.data));
-  };
+  const refreshList = async () => {
+    try {
+      const response = await api.get("/books/");
+      setBooks(response.data);
 
-  const handleDeleteBook = (book: Book) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this book?"
-    );
-    if (confirmDelete) {
-      api
-        .delete(`/books/${book.id}/`)
-        .then(() => refreshList())
-        .catch((error) => {
-          console.error("There was an error deleting the book!", error);
-        });
+      // If the books are refreshed while viewing book, it will update the viewing book
+      if (viewingBook.id) {
+        setViewingBook(await getBookById(viewingBook.id));
+      }
+      console.log("Books fetched");
+    } catch (error) {
+      console.error("Error fetching books:", error);
     }
   };
 
-  // Open Edit Book Modal
-  const handleOpenEditBookModal = (book: Book) => {
-    // Sets the initial data that is passed into EditBookModal
-    setInitialData(book);
-
-    // Opens the Edit Book Modal
-    setIsEditModalOpen(true);
+  const handleViewBook = (book: Book) => {
+    setViewingBook(book);
+    setTitle(`${book.title} by ${book.author}`);
   };
 
-  // Create Book
-  const handleOpenCreateBook = () => {
-    setIsCreateModalOpen(true);
-  };
-
-  const handleCreateQuoteModal = (book: Book) => {
-    setBookForQuoteModal(book);
-    setIsCreateQuoteModalOpen(true);
-  };
-
-  const handleViewQuotes = (book: Book) => {
-    setBookForQuoteModal(book);
-    setIsViewQuoteModalOpen(true);
-  };
-
-  const handleViewReflection = (book: Book) => {
-    setBookForQuoteModal(book);
-    setIsReflectModalOpen(true);
+  const handleSwitchToLibrary = () => {
+    setViewingBook({} as Book);
+    setTitle("Library");
   };
 
   // Actions for each respective drop down.
+
   const wishlistActions: Action[] = [
     {
-      name: "Edit",
-      action: (book: Book) => handleOpenEditBookModal(book),
+      name: "View Book",
+      action: (book: Book) => handleViewBook(book),
     },
     {
       name: "Bought",
@@ -149,8 +89,8 @@ function Library() {
   ];
   const boughtActions: Action[] = [
     {
-      name: "Edit",
-      action: (book: Book) => handleOpenEditBookModal(book),
+      name: "View Book",
+      action: (book: Book) => handleViewBook(book),
     },
     {
       name: "Start Reading",
@@ -159,34 +99,18 @@ function Library() {
   ];
   const currentlyReadingActions: Action[] = [
     {
-      name: "Edit",
-      action: (book: Book) => handleOpenEditBookModal(book),
+      name: "View Book",
+      action: (book: Book) => handleViewBook(book),
     },
     {
       name: "Finished Reading",
       action: (book: Book) => moveBook(book),
     },
-    {
-      name: "View Quotes",
-      action: (book: Book) => handleViewQuotes(book),
-    },
-    {
-      name: "Edit Reflection",
-      action: (book: Book) => handleViewReflection(book),
-    },
   ];
   const readActions: Action[] = [
     {
-      name: "Edit",
-      action: (book: Book) => handleOpenEditBookModal(book),
-    },
-    {
-      name: "View Quotes",
-      action: (book: Book) => handleViewQuotes(book),
-    },
-    {
-      name: "Edit Reflection",
-      action: (book: Book) => handleViewReflection(book),
+      name: "View Book",
+      action: (book: Book) => handleViewBook(book),
     },
   ];
 
@@ -198,89 +122,56 @@ function Library() {
   const currentlyReadingBooks = books.filter((book) => book.reading);
   const readBooks = books.filter((book) => book.read);
 
+  // Create Book Form
+  const handleCreateBook = () => {
+    console.log("Create Book");
+  };
+
   return (
     <>
       <div className="title_block">
-        <h1 className="title">Library</h1>
+        <h1 className="title">{title}</h1>
       </div>
-      <div className="library-main">
-        <BookGroup
-          button=<Button color="secondary" onClick={handleOpenCreateBook}>
-            Add Book
-          </Button>
-          books={wishlistBooks}
-          actions={wishlistActions}
-          onDoubleClick={handleOpenEditBookModal}
-        >
-          Wishlist
-        </BookGroup>
-        <BookGroup
-          onDoubleClick={handleOpenEditBookModal}
-          books={boughtBooks}
-          actions={boughtActions}
-        >
-          Bought
-        </BookGroup>
-        <BookGroup
-          onDoubleClick={handleOpenEditBookModal}
-          books={currentlyReadingBooks}
-          actions={currentlyReadingActions}
-        >
-          Currently Reading
-        </BookGroup>
-        <BookGroup
-          onDoubleClick={handleOpenEditBookModal}
-          books={readBooks}
-          actions={readActions}
-        >
-          Read
-        </BookGroup>
-      </div>
-      <div className="modal-container">
-        {isEditModalOpen && (
-          <EditBookModal
-            isOpen={isEditModalOpen}
-            onClose={() => setIsEditModalOpen(false)}
-            editBook={initialData}
-            onSave={updateBook}
-            onDelete={handleDeleteBook}
-          />
-        )}
-        {isCreateModalOpen && (
-          <CreateBookModal
-            isOpen={isCreateModalOpen}
-            onClose={() => setIsCreateModalOpen(false)}
-            onCreate={createBook}
-          />
-        )}
-        {isCreateQuoteModalOpen && (
-          <CreateQuoteModal
-            book={bookForQuoteModal}
-            isOpen={isCreateQuoteModalOpen}
-            onClose={() => setIsCreateQuoteModalOpen(false)}
-            onCreate={createQuote}
-          />
-        )}
-        {IsViewQuoteModalOpen && (
-          <ViewQuoteModal
-            refresh={refreshList}
-            book={bookForQuoteModal}
-            isOpen={IsViewQuoteModalOpen}
-            onClose={() => setIsViewQuoteModalOpen(false)}
-            createQuote={handleCreateQuoteModal}
-          />
-        )}
-        {isReflectModalOpen && (
-          <BookReflectModal
-            book={bookForQuoteModal}
-            isOpen={isReflectModalOpen}
-            onClose={() => {
-              setIsReflectModalOpen(false);
-              refreshList();
-            }}
-          />
-        )}
-      </div>
+      {viewingBook.title ? (
+        <>
+          <Button onClick={() => handleSwitchToLibrary()}>Back</Button>
+          <BookView book={viewingBook} refresh={refreshList} />
+        </>
+      ) : (
+        <div className="library-main">
+          <BookGroup
+            button=<Button color="secondary" onClick={handleCreateBook}>
+              Add Book
+            </Button>
+            books={wishlistBooks}
+            actions={wishlistActions}
+            onDoubleClick={handleViewBook}
+          >
+            Wishlist
+          </BookGroup>
+          <BookGroup
+            onDoubleClick={handleViewBook}
+            books={boughtBooks}
+            actions={boughtActions}
+          >
+            Bought
+          </BookGroup>
+          <BookGroup
+            onDoubleClick={handleViewBook}
+            books={currentlyReadingBooks}
+            actions={currentlyReadingActions}
+          >
+            Currently Reading
+          </BookGroup>
+          <BookGroup
+            onDoubleClick={handleViewBook}
+            books={readBooks}
+            actions={readActions}
+          >
+            Read
+          </BookGroup>
+        </div>
+      )}
     </>
   );
 }
