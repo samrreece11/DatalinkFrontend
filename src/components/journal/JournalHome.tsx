@@ -22,7 +22,7 @@ const JournalHome = () => {
     "Sep",
     "Oct",
     "Nov",
-    "Dev",
+    "Dec",
   ];
 
   const [isViewingJournal, setIsViewingJournal] = useState<boolean>(false);

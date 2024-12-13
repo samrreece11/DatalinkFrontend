@@ -38,9 +38,16 @@ const JournalModal: React.FC<ModalProps> = ({ journal, onClose }) => {
   };
 
   const handleSave = async (data: string) => {
-    await api.patch(`/reflections/${journal.id}/`, {
-      content: data,
-    });
+    if (journal.isSpecific) {
+      await api.patch(`/reflections/${journal.id}/`, {
+        title: title,
+        content: data,
+      });
+    } else {
+      await api.patch(`/reflections/${journal.id}/`, {
+        content: data,
+      });
+    }
     onClose();
   };
 

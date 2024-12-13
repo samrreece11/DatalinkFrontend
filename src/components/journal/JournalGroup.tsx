@@ -30,7 +30,7 @@ const JournalGroup = ({
                 onClick={handleOpenReflection}
                 className="title-btn"
               >
-                +
+                Daily
               </Button>
             )}
           </h3>
