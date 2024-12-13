@@ -4,9 +4,11 @@ import DropdownBookOption from "./ButtonDrop";
 interface Props {
   book: Book;
   actions: Action[];
+  onDoubleClick: (book: Book) => void;
 }
 
-const BookDisplay = ({ book, actions }: Props) => {
+const BookDisplay = ({ book, actions, onDoubleClick }: Props) => {
+  const fullDisplay = false;
   return (
     <>
       <button
@@ -14,8 +16,14 @@ const BookDisplay = ({ book, actions }: Props) => {
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"
+        onDoubleClick={() => onDoubleClick(book)}
       >
-        - {book.title} By <i>{book.author}</i>
+        {book.title}
+        {fullDisplay && (
+          <>
+            By <i>{book.author}</i>
+          </>
+        )}
       </button>
       <div key={book.id} className="dropdown-menu">
         {actions.map((action) => (

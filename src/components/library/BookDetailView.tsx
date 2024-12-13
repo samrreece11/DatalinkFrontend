@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import { Button, Form, Input, Label } from "reactstrap";
 import { Book } from "./libraryTypes";
 import api from "../../types/api";
 
@@ -65,9 +65,9 @@ const BookDetailView = ({ book, refresh }: Props) => {
 
   return (
     <>
-      <div className="book-detail-form">
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
+      <Form onSubmit={handleSubmit}>
+        <div className="book-detail-form">
+          <div className="book-detail-group">
             <Label for="title">Title</Label>
             <Input
               type="text"
@@ -77,8 +77,8 @@ const BookDetailView = ({ book, refresh }: Props) => {
               placeholder="Enter Title"
               onChange={handleChange}
             />
-          </FormGroup>
-          <FormGroup>
+          </div>
+          <div className="book-detail-group">
             <Label for="author">Author</Label>
             <Input
               type="text"
@@ -88,8 +88,8 @@ const BookDetailView = ({ book, refresh }: Props) => {
               placeholder="Enter author"
               onChange={handleChange}
             />
-          </FormGroup>
-          <FormGroup>
+          </div>
+          <div className="book-detail-group">
             <Label for="pageNumbers">Number of Pages</Label>
             <Input
               type="text"
@@ -99,38 +99,46 @@ const BookDetailView = ({ book, refresh }: Props) => {
               placeholder="Enter Number of Pages"
               onChange={handleChange}
             />
-          </FormGroup>
-          <FormGroup>
-            <Label for="bought">Bought</Label>
-            <Input
-              type="checkbox"
-              id="bought"
-              name="bought"
-              checked={formData.bought}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="reading">Reading</Label>
-            <Input
-              type="checkbox"
-              id="reading"
-              name="reading"
-              checked={formData.reading}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="read">Read</Label>
-            <Input
-              type="checkbox"
-              id="read"
-              name="read"
-              checked={formData.read}
-              onChange={handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
+          </div>
+          <div className="book-detail-group">
+            <div className="checkbox-group">
+              <Label for="bought" className="checkbox-label">
+                Bought
+              </Label>
+              <Input
+                type="checkbox"
+                id="bought"
+                name="bought"
+                checked={formData.bought}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="checkbox-group">
+              <Label for="reading" className="checkbox-label">
+                Reading
+              </Label>
+              <Input
+                type="checkbox"
+                id="reading"
+                name="reading"
+                checked={formData.reading}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="checkbox-group">
+              <Label for="read" className="checkbox-label">
+                Read
+              </Label>
+              <Input
+                type="checkbox"
+                id="read"
+                name="read"
+                checked={formData.read}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className="book-detail-group">
             <Label for="startDate">Start Date</Label>
             <Input
               type="date"
@@ -146,32 +154,25 @@ const BookDetailView = ({ book, refresh }: Props) => {
                 }));
               }}
             />
-          </FormGroup>
-          <FormGroup>
-            <Label for="endDate">End Date</Label>
-            <Input
-              type="date"
-              id="endDate"
-              name="endDate"
-              value={formData.endDate ? formData.endDate : ""}
-              placeholder="Enter endDate"
-              onChange={(e) => {
-                const selectedDate = new Date(e.target.value); // Convert string back to Date
-                setFormData((prevData) => ({
-                  ...prevData,
-                  endDate: selectedDate.toISOString().slice(0, 10), // Update the state with the Date object
-                }));
-              }}
-            />
-          </FormGroup>
-          <Button color="success" type="submit">
-            Save
-          </Button>
-          <Button color="danger" onClick={handleDelete}>
-            Delete
-          </Button>
-        </Form>
-      </div>
+          </div>
+        </div>
+        <Button
+          size="lg"
+          color="success"
+          type="submit"
+          className="detail-form-btn"
+        >
+          Save
+        </Button>
+        <Button
+          size="lg"
+          color="danger"
+          onClick={handleDelete}
+          className="detail-form-btn"
+        >
+          Delete
+        </Button>
+      </Form>
     </>
   );
 };
