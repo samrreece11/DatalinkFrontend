@@ -1,29 +1,35 @@
-import { Book, Quote } from "./libraryTypes";
+import { useLocation } from "react-router-dom";
+import BoxComponent from "../structure/BoxComponent";
+import { Book } from "./libraryTypes";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import ReflectionView from "./ReflectionContainer";
 import QuoteView from "./QuoteView";
 import BookDetailView from "./BookDetailView";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
-import { useEffect, useState } from "react";
-import { getQuotesByBook } from "./LibraryUtils";
 
-interface Props {
-  book: Book;
-  refresh: () => void;
-}
-const BookView = ({ book, refresh }: Props) => {
-  const [quotes, setQuotes] = useState<Quote[]>([]);
-  const getQuotes = async () => {
-    const quotes = await getQuotesByBook(book.id);
-    quotes.sort((a, b) => a.pageNum - b.pageNum);
-    setQuotes(quotes);
+// Takes book ID from URL and displays book information on site.
+
+const BookView = () => {
+  const location = useLocation();
+  const book = location.state?.book || ({} as Book);
+
+  const handleSave = () => {
+    console.log("Saved");
   };
 
-  useEffect(() => {
-    getQuotes();
-  }, [book]);
+  if (!book.title) {
+    return (
+      <BoxComponent title="Book View Test" titleSize={1}>
+        No book found...
+      </BoxComponent>
+    );
+  }
 
   return (
-    <div className="book-view">
+    <BoxComponent
+      title={`${book.title} by ${book.author}`}
+      titleSize={1}
+      backButton={true}
+    >
       <TabGroup>
         <TabList className="tab-list">
           <Tab
@@ -44,17 +50,17 @@ const BookView = ({ book, refresh }: Props) => {
         </TabList>
         <TabPanels className="tab-panel">
           <TabPanel>
-            <ReflectionView book={book} refresh={refresh} />
+            <ReflectionView book={book} onSave={handleSave} />
           </TabPanel>
           <TabPanel>
-            <QuoteView book={book} quotes={quotes} refresh={getQuotes} />
+            <QuoteView book={book} onSave={handleSave} />
           </TabPanel>
           <TabPanel>
-            <BookDetailView book={book} refresh={refresh} />
+            <BookDetailView book={book} onSave={handleSave} />
           </TabPanel>
         </TabPanels>
       </TabGroup>
-    </div>
+    </BoxComponent>
   );
 };
 

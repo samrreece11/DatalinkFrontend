@@ -2,20 +2,15 @@ import { useEffect, useState } from "react";
 import { Book, Action } from "./libraryTypes";
 import BookGroup from "./BookGroup";
 import api from "../../types/api";
-
-import BookView from "./BookView";
-import { getBookById } from "./LibraryUtils";
-import { Button } from "reactstrap";
 import SearchBox from "./SearchBox";
 import { useNavigate } from "react-router-dom";
+import BoxComponent from "../structure/BoxComponent";
 
 // Define the type for the items
 
 function Library() {
   const [books, setBooks] = useState<Book[]>([]);
   const [searchBooks, setSearchBooks] = useState<Book[]>([]);
-  const [viewingBook, setViewingBook] = useState<Book>({} as Book);
-  const [title, setTitle] = useState<string>("Library");
   const [search, setSearch] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
@@ -62,11 +57,6 @@ function Library() {
     try {
       const response = await api.get("/books/");
       setBooks(response.data);
-
-      // If the books are refreshed while viewing book, it will update the viewing book
-      if (viewingBook.id) {
-        setViewingBook(await getBookById(viewingBook.id));
-      }
       console.log("Books fetched");
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -75,11 +65,6 @@ function Library() {
 
   const handleViewBook = (book: Book) => {
     navigate(`/book/${book.title.replace(/\s+/g, "")}`, { state: { book } });
-  };
-
-  const handleSwitchToLibrary = () => {
-    setViewingBook({} as Book);
-    setTitle("Library");
   };
 
   // Actions for each respective drop down.
@@ -145,91 +130,72 @@ function Library() {
   }, [search]);
 
   return (
-    <>
-      <div className="title_block">
-        <h1 className="title">
-          {title}{" "}
-          {viewingBook.title && (
-            <Button
-              className="title-btn"
-              onClick={() => handleSwitchToLibrary()}
-            >
-              Back
-            </Button>
-          )}
-        </h1>
-      </div>
+    <BoxComponent title="Library" titleSize={1}>
       <div className="main">
-        {viewingBook.title ? (
-          <>
-            <BookView book={viewingBook} refresh={refreshList} />
-          </>
-        ) : (
-          <>
-            <div className="search-bar">
-              {isSearching ? (
-                <SearchBox
-                  search={search}
-                  setSearch={setSearch}
-                  onBlur={() => setIsSearching(false)}
-                />
-              ) : (
-                <button
-                  className="search-btn"
-                  onClick={() => setIsSearching(true)}
-                >
-                  Search Books
-                </button>
-              )}
-            </div>
-            {search ? (
-              <div className="search-results">
-                <BookGroup
-                  onDoubleClick={handleViewBook}
-                  books={searchBooks}
-                  actions={readActions}
-                >
-                  Search Results:
-                </BookGroup>
-              </div>
+        <>
+          <div className="search-bar">
+            {isSearching ? (
+              <SearchBox
+                search={search}
+                setSearch={setSearch}
+                onBlur={() => setIsSearching(false)}
+              />
             ) : (
-              <div className="library-main">
-                <BookGroup
-                  onDoubleClick={handleViewBook}
-                  books={wishlistBooks}
-                  actions={wishlistActions}
-                  refresh={refreshList}
-                >
-                  Wishlist
-                </BookGroup>
-                <BookGroup
-                  onDoubleClick={handleViewBook}
-                  books={currentlyReadingBooks}
-                  actions={currentlyReadingActions}
-                >
-                  Currently Reading
-                </BookGroup>
-                <BookGroup
-                  onDoubleClick={handleViewBook}
-                  books={boughtBooks}
-                  actions={boughtActions}
-                >
-                  Bought
-                </BookGroup>
-
-                <BookGroup
-                  onDoubleClick={handleViewBook}
-                  books={readBooks}
-                  actions={readActions}
-                >
-                  Read
-                </BookGroup>
-              </div>
+              <button
+                className="search-btn"
+                onClick={() => setIsSearching(true)}
+              >
+                Search Books
+              </button>
             )}
-          </>
-        )}
+          </div>
+          {search ? (
+            <div className="search-results">
+              <BookGroup
+                onDoubleClick={handleViewBook}
+                books={searchBooks}
+                actions={readActions}
+              >
+                Search Results:
+              </BookGroup>
+            </div>
+          ) : (
+            <div className="library-main">
+              <BookGroup
+                onDoubleClick={handleViewBook}
+                books={wishlistBooks}
+                actions={wishlistActions}
+                refresh={refreshList}
+              >
+                Wishlist
+              </BookGroup>
+              <BookGroup
+                onDoubleClick={handleViewBook}
+                books={currentlyReadingBooks}
+                actions={currentlyReadingActions}
+              >
+                Currently Reading
+              </BookGroup>
+              <BookGroup
+                onDoubleClick={handleViewBook}
+                books={boughtBooks}
+                actions={boughtActions}
+              >
+                Bought
+              </BookGroup>
+
+              <BookGroup
+                onDoubleClick={handleViewBook}
+                books={readBooks}
+                actions={readActions}
+              >
+                Read
+              </BookGroup>
+            </div>
+          )}
+        </>
       </div>
-    </>
+    </BoxComponent>
   );
 }
 

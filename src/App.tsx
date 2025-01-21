@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import NavBar from "./components/home/NavBar";
 import UserSettings from "./components/user/UserSettings";
 import FaithHome from "./components/faith/FaithHome";
-import BookViewTest from "./components/library/BookViewTest";
+import BookViewTest from "./components/library/BookView";
 
 function App() {
   useEffect(() => {
