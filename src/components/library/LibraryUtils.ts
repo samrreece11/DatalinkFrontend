@@ -40,3 +40,13 @@ export const getBookById = async (id: number): Promise<Book> => {
   }
   return {} as Book;
 };
+
+export const getCurrentlyReadingBooks = async (): Promise<Book[]> => {
+  try {
+    const res = await api.get("/books/");
+    return res.data.filter((book: Book) => book.reading);
+  } catch (error) {
+    console.log(error);
+  }
+  return [];
+}

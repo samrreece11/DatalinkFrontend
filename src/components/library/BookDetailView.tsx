@@ -5,9 +5,9 @@ import api from "../../types/api";
 
 interface Props {
   book: Book;
-  refresh: () => void;
+  onSave: () => void;
 }
-const BookDetailView = ({ book, refresh }: Props) => {
+const BookDetailView = ({ book, onSave }: Props) => {
   const [formData, setFormData] = useState<Book>(book);
 
   // Update formData when the modal opens or book changes
@@ -18,7 +18,7 @@ const BookDetailView = ({ book, refresh }: Props) => {
   const updateBook = async (book: Book) => {
     try {
       await api.put(`/books/${book.id}/`, formData);
-      refresh();
+      onSave();
     } catch (error) {
       console.error("Error updating book:", error);
       // Handle error (e.g., show a notification)
@@ -56,7 +56,7 @@ const BookDetailView = ({ book, refresh }: Props) => {
     if (confirmDelete) {
       api
         .delete(`/books/${book.id}/`)
-        .then(() => refresh())
+        .then(() => onSave())
         .catch((error) => {
           console.error("There was an error deleting the book!", error);
         });

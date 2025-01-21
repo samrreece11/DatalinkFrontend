@@ -3,6 +3,7 @@ import { Button, Form, FormGroup } from "reactstrap";
 import CKEditorBox from "../utils/CKEditorBox";
 import { BibleBook, BibleVerse } from "./FaithTypes";
 import VerseContainer from "./VerseContainer";
+import BoxComponent from "../structure/BoxComponent";
 
 interface Props {
   currentBibleBook: BibleBook;
@@ -34,6 +35,37 @@ const BibleBookDisplay = ({
 
   return (
     <>
+      <BoxComponent
+        title={currentBibleBook.title}
+        className="w-400 m-1 grey-box flex-grow1"
+      >
+        <div className="flex">
+          <div className="bible-notes border-2">
+            <h4>Notes: </h4>
+            <Form onSubmit={onSubmit}>
+              <FormGroup>
+                <CKEditorBox input={notes} handleSave={setNotes} />
+              </FormGroup>
+              <FormGroup>
+                <h4>Historic Notes: </h4>
+                <CKEditorBox
+                  input={historicNotes}
+                  handleSave={setHistoricNotes}
+                />
+              </FormGroup>
+              <Button color="success" size="lg" type="submit">
+                Save
+              </Button>
+            </Form>
+          </div>
+          <VerseContainer
+            currentBook={currentBibleBook}
+            verses={verses}
+            onCreate={onCreate}
+            long={true}
+          />
+        </div>
+      </BoxComponent>
       <div className="bible-book-container">
         <div className="title-block">
           <h3 className="title">

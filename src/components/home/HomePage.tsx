@@ -1,17 +1,17 @@
-import Title from "../utils/TitleBlock";
+import BoxComponent from "../structure/BoxComponent";
+import CurrentlyReadingBooks from "./CurrentlyReadingBooks";
 import DailyQuoteDisplay from "./DailyQuote";
 import DailyVerseDisplay from "./DailyVerse";
 
 const HomePage = () => {
   return (
-    <>
-      <Title size={1}>Home Page</Title>
-      <div className="flex">
+    <BoxComponent title="Home Page" titleSize={1}>
+      <div className="main">
         <DailyQuoteDisplay />
         <DailyVerseDisplay />
-        <div className="grey-box">Additional Features Coming Soon!</div>
+        <CurrentlyReadingBooks />
       </div>
-    </>
+    </BoxComponent>
   );
 };
 

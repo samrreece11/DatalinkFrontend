@@ -12,6 +12,7 @@ import {
   DropdownItem,
   Dropdown,
 } from "reactstrap";
+import LogoutButton from "../utils/LogoutButton";
 
 const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,9 +39,6 @@ const NavBar: React.FC = () => {
               <NavLink href="/journal/">Reflections</NavLink>
             </NavItem>
             <NavItem>
-              <NavLink href="/todo/">To Do</NavLink>
-            </NavItem>
-            <NavItem>
               <NavLink href="/faith/">Faith</NavLink>
             </NavItem>
           </Nav>
@@ -62,6 +60,9 @@ const NavBar: React.FC = () => {
                   <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
                 </DropdownMenu>
               </Dropdown>
+            </NavItem>
+            <NavItem>
+              <LogoutButton onClick={handleLogout} />
             </NavItem>
           </Nav>
         </Collapse>

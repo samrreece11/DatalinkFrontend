@@ -3,6 +3,7 @@ import api from "../../types/api";
 import { Button, Form, FormGroup, Input } from "reactstrap";
 import Title from "../utils/TitleBlock";
 import axios from "axios";
+import LoginButton from "../utils/LoginButton";
 
 const LoginPage = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -190,27 +191,30 @@ const LoginPage = () => {
               </div>
             </>
           ) : (
-            <>
+            <div className="login-box">
               <div className="login-intro">
                 <p>
-                  Track your Books, Journals, To Do Lists, and more with Daily
+                  Track your Books, Reflections, Goals, and Faith with Daily
                   Sync!
                 </p>
               </div>
-              <a
+              <LoginButton
+                className={"m-auto"}
+                onClick={() => setIsLoginModalOpen(true)}
+              />
+              {/* <a
                 onClick={() => setIsLoginModalOpen(true)}
                 className="login-ctaBtn"
               >
                 Log In
-              </a>
-              <br />
+              </a> */}
               <button
                 onClick={() => setIsCreateUserModalOpen(true)}
                 className="create-user-btn hover"
               >
                 Don't have an account? Create One!
               </button>
-            </>
+            </div>
           )}
           <footer className="login-footer">
             <p>© 2024 Daily Sync. All rights reserved.</p>

@@ -5,6 +5,7 @@ import { Button } from "reactstrap";
 import api from "../../types/api";
 import CreateVerseForm from "./CreateVerseForm";
 import VerseElementLong from "./VerseElementLong";
+import BoxComponent from "../structure/BoxComponent";
 
 interface Props {
   verses: BibleVerse[];
@@ -31,64 +32,67 @@ const VerseContainer = ({ verses, onCreate, long, currentBook }: Props) => {
   };
 
   return (
-    <div className="verse-container grey-box">
-      <div className="title-block">
-        <h4 className="title">Verses</h4>
-      </div>
-      {isAddingVerse ? (
-        <CreateVerseForm
-          onCreate={onCreate}
-          setIsAddingVerse={setIsAddingVerse}
-          currentBook={currentBook}
-        ></CreateVerseForm>
-      ) : (
-        !viewVerse && (
-          <div onClick={() => setIsAddingVerse(true)} className="add-verse">
-            + Add Verse
-          </div>
-        )
-      )}
-      {viewVerse ? (
-        <>
-          <Button className="al-r" size="sm" onClick={() => setViewVerse(null)}>
-            Back
-          </Button>
-          <br />
-          <br />
-          <div className="view-verse">
-            <b>
-              {viewVerse.book.title} {viewVerse.chapter}:{viewVerse.verse}
-              {viewVerse.endVerse && `-${viewVerse.endVerse}`}
-            </b>
-            {": "}
-            {viewVerse.content}
-            <br />
-            <br />
-            <Button size="sm" color="danger" onClick={handleDeleteVerse}>
-              Delete
+    <BoxComponent title="Verses" className="grey-box m-auto w-75p mb-2 center">
+      <div className="">
+        {isAddingVerse ? (
+          <CreateVerseForm
+            onCreate={onCreate}
+            setIsAddingVerse={setIsAddingVerse}
+            currentBook={currentBook}
+          ></CreateVerseForm>
+        ) : (
+          !viewVerse && (
+            <div onClick={() => setIsAddingVerse(true)} className="add-verse">
+              + Add Verse
+            </div>
+          )
+        )}
+        {viewVerse ? (
+          <>
+            <Button
+              className="al-r"
+              size="sm"
+              onClick={() => setViewVerse(null)}
+            >
+              Back
             </Button>
+            <br />
+            <br />
+            <div className="view-verse">
+              <b>
+                {viewVerse.book.title} {viewVerse.chapter}:{viewVerse.verse}
+                {viewVerse.endVerse && `-${viewVerse.endVerse}`}
+              </b>
+              {": "}
+              {viewVerse.content}
+              <br />
+              <br />
+              <Button size="sm" color="danger" onClick={handleDeleteVerse}>
+                Delete
+              </Button>
+            </div>
+          </>
+        ) : (
+          <div className="flex">
+            {verses.map((verse) =>
+              long ? (
+                <VerseElementLong
+                  setViewVerse={setViewVerse}
+                  verse={verse}
+                  key={verse.id}
+                />
+              ) : (
+                <VerseElement
+                  setViewVerse={setViewVerse}
+                  verse={verse}
+                  key={verse.id}
+                />
+              )
+            )}
           </div>
-        </>
-      ) : (
-        <div className="flex">
-          {verses.map((verse) =>
-            long ? (
-              <VerseElementLong
-                setViewVerse={setViewVerse}
-                verse={verse}
-                key={verse.id}
-              />
-            ) : (
-              <VerseElement
-                setViewVerse={setViewVerse}
-                verse={verse}
-                key={verse.id}
-              />
-            )
-          )}
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </BoxComponent>
   );
 };
 

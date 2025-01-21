@@ -3,9 +3,9 @@ import api from "../../types/api";
 import { GroupedJournals, Journal } from "./journalTypes";
 import JournalGroup from "./JournalGroup";
 import { Button } from "reactstrap";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 
 import JournalView from "./JournalView";
+import SearchBox from "../library/SearchBox";
 
 const JournalHome = () => {
   const [journals, setJournals] = useState<Journal[]>([]);
@@ -34,6 +34,25 @@ const JournalHome = () => {
     date: "",
   });
 
+  const [search, setSearch] = useState<string>("");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [searchJournals, setSearchJournals] = useState<Journal[]>([]);
+
+  useEffect(() => {
+    if (search) {
+      setSearchJournals(
+        journals.filter(
+          (journal) =>
+            journal.title.toLowerCase().includes(search.toLowerCase()) ||
+            journal.date.toLowerCase().includes(search.toLowerCase())
+        )
+      );
+    }
+    if (!search) {
+      setSearchJournals([]);
+    }
+  }, [search]);
+
   useEffect(() => {
     refreshList();
   }, []); // Only runs on first render
@@ -48,7 +67,7 @@ const JournalHome = () => {
 
   const groupByMonthYear = (journals: Journal[]): GroupedJournals => {
     const grouped: GroupedJournals = {};
-    const sortedJournals = journals.sort((a, b) => {
+    let sortedJournals = journals.sort((a, b) => {
       const dateA = new Date(a.date).getTime(); // Convert to timestamp
       const dateB = new Date(b.date).getTime(); // Convert to timestamp
       return dateB - dateA; // Sort in ascending order (earliest first)
@@ -56,7 +75,6 @@ const JournalHome = () => {
     sortedJournals.sort((a, b) => {
       return Number(b.isSpecific) - Number(a.isSpecific);
     });
-
     sortedJournals.forEach((journal) => {
       const date = new Date(journal.date);
       const year = date.getUTCFullYear(); // Ensure we get the full year
@@ -138,60 +156,63 @@ const JournalHome = () => {
       ) : (
         <>
           <div className="title_block">
-            <h1 className="title">
-              Reflections
-              <Menu>
-                <MenuButton
-                  as={Button}
-                  color="secondary"
-                  className="journal-btn"
-                >
-                  Add Reflection
-                </MenuButton>
-                <MenuItems>
-                  <MenuItem>
-                    <Button
-                      className="journal-btn"
-                      color="secondary"
-                      onClick={openSpecificReflection}
-                    >
-                      Specific Reflection
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button
-                      className="journal-btn"
-                      color="secondary"
-                      onClick={openOrCreateDailyReflection}
-                    >
-                      Today's Reflection
-                    </Button>
-                  </MenuItem>
-                </MenuItems>
-              </Menu>
-            </h1>
+            <h1 className="title">Reflections</h1>
           </div>
-
-          <div className="journal-main">
-            {Object.entries(groupedJournals).map(([monthYear, journals]) => {
-              let isCurrentMonth = false;
-              const currentMonthYear = `${
-                months[new Date().getUTCMonth()]
-              } ${new Date().getUTCFullYear()}`;
-              if (monthYear === currentMonthYear) {
-                isCurrentMonth = true;
-              }
-              return (
+          <div className="center">
+            {isSearching ? (
+              <SearchBox
+                search={search}
+                setSearch={setSearch}
+                onBlur={() => setIsSearching(false)}
+              ></SearchBox>
+            ) : (
+              <>
+                <Button
+                  color="secondary"
+                  onClick={openSpecificReflection}
+                  className="search-btn mx-2"
+                >
+                  + Specific Reflection
+                </Button>
+                <Button
+                  color="secondary"
+                  onClick={openOrCreateDailyReflection}
+                  className="search-btn mx-2"
+                >
+                  Daily Reflection
+                </Button>
+                <Button
+                  color="secondary"
+                  onClick={setIsSearching.bind(null, true)}
+                  className="search-btn mx-2"
+                >
+                  Search
+                </Button>
+              </>
+            )}
+          </div>
+          <div className="main">
+            <div className="journal-main">
+              {search ? (
                 <JournalGroup
-                  key={monthYear}
-                  journals={journals}
-                  monthYear={monthYear}
+                  journals={searchJournals}
+                  monthYear="Search Results"
                   onClick={viewJournal}
-                  isCurrentMonth={isCurrentMonth}
-                  handleOpenReflection={openOrCreateDailyReflection}
+                  isLongForm
                 />
-              );
-            })}
+              ) : (
+                Object.entries(groupedJournals).map(([monthYear, journals]) => {
+                  return (
+                    <JournalGroup
+                      key={monthYear}
+                      journals={journals}
+                      monthYear={monthYear}
+                      onClick={viewJournal}
+                    />
+                  );
+                })
+              )}
+            </div>
           </div>
         </>
       )}

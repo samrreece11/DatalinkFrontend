@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BibleVerse } from "../faith/FaithTypes";
 import api from "../../types/api";
+import HomePageComponent from "../structure/BoxComponent";
 
 const DailyVerseDisplay = () => {
   const [currentDailyVerse, setCurrentDailyVerse] = useState<BibleVerse>(
@@ -25,10 +26,10 @@ const DailyVerseDisplay = () => {
   };
 
   return (
-    <div className="grey-box daily-verse">
-      <div className="title_block">
-        <h3 className="title">Daily Verse</h3>
-      </div>
+    <HomePageComponent
+      title="Daily Verse"
+      className="grey-box m-2 w-300 flex-grow"
+    >
       {currentDailyVerse.content ? (
         <div>
           <b>
@@ -40,7 +41,7 @@ const DailyVerseDisplay = () => {
       ) : (
         <p>No Daily Verses Found... Try adding some in Faith Section!</p>
       )}
-    </div>
+    </HomePageComponent>
   );
 };
 

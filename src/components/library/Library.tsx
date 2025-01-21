@@ -7,7 +7,7 @@ import BookView from "./BookView";
 import { getBookById } from "./LibraryUtils";
 import { Button } from "reactstrap";
 import SearchBox from "./SearchBox";
-import WishlistGroup from "./Wishlist";
+import { useNavigate } from "react-router-dom";
 
 // Define the type for the items
 
@@ -18,6 +18,8 @@ function Library() {
   const [title, setTitle] = useState<string>("Library");
   const [search, setSearch] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     refreshList();
@@ -72,8 +74,7 @@ function Library() {
   };
 
   const handleViewBook = (book: Book) => {
-    setViewingBook(book);
-    setTitle(`${book.title} by ${book.author}`);
+    navigate(`/book/${book.title.replace(/\s+/g, "")}`, { state: { book } });
   };
 
   const handleSwitchToLibrary = () => {
@@ -158,74 +159,76 @@ function Library() {
           )}
         </h1>
       </div>
-      {viewingBook.title ? (
-        <>
-          <BookView book={viewingBook} refresh={refreshList} />
-        </>
-      ) : (
-        <>
-          <div className="search-bar">
-            {isSearching ? (
-              <SearchBox
-                search={search}
-                setSearch={setSearch}
-                onBlur={() => setIsSearching(false)}
-              />
+      <div className="main">
+        {viewingBook.title ? (
+          <>
+            <BookView book={viewingBook} refresh={refreshList} />
+          </>
+        ) : (
+          <>
+            <div className="search-bar">
+              {isSearching ? (
+                <SearchBox
+                  search={search}
+                  setSearch={setSearch}
+                  onBlur={() => setIsSearching(false)}
+                />
+              ) : (
+                <button
+                  className="search-btn"
+                  onClick={() => setIsSearching(true)}
+                >
+                  Search Books
+                </button>
+              )}
+            </div>
+            {search ? (
+              <div className="search-results">
+                <BookGroup
+                  onDoubleClick={handleViewBook}
+                  books={searchBooks}
+                  actions={readActions}
+                >
+                  Search Results:
+                </BookGroup>
+              </div>
             ) : (
-              <button
-                className="search-btn"
-                onClick={() => setIsSearching(true)}
-              >
-                Search Books
-              </button>
-            )}
-          </div>
-          {search ? (
-            <div className="search-results">
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={searchBooks}
-                actions={readActions}
-              >
-                Search Results:
-              </BookGroup>
-            </div>
-          ) : (
-            <div className="library-main">
-              <WishlistGroup
-                books={wishlistBooks}
-                actions={wishlistActions}
-                onDoubleClick={handleViewBook}
-                refresh={refreshList}
-              >
-                Wishlist
-              </WishlistGroup>
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={currentlyReadingBooks}
-                actions={currentlyReadingActions}
-              >
-                Currently Reading
-              </BookGroup>
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={boughtBooks}
-                actions={boughtActions}
-              >
-                Bought
-              </BookGroup>
+              <div className="library-main">
+                <BookGroup
+                  onDoubleClick={handleViewBook}
+                  books={wishlistBooks}
+                  actions={wishlistActions}
+                  refresh={refreshList}
+                >
+                  Wishlist
+                </BookGroup>
+                <BookGroup
+                  onDoubleClick={handleViewBook}
+                  books={currentlyReadingBooks}
+                  actions={currentlyReadingActions}
+                >
+                  Currently Reading
+                </BookGroup>
+                <BookGroup
+                  onDoubleClick={handleViewBook}
+                  books={boughtBooks}
+                  actions={boughtActions}
+                >
+                  Bought
+                </BookGroup>
 
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={readBooks}
-                actions={readActions}
-              >
-                Read
-              </BookGroup>
-            </div>
-          )}
-        </>
-      )}
+                <BookGroup
+                  onDoubleClick={handleViewBook}
+                  books={readBooks}
+                  actions={readActions}
+                >
+                  Read
+                </BookGroup>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 }

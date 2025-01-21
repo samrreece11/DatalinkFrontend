@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('/src/styles/presets.css');
 
 @media print {
 	body {
 		margin: 0 !important;
 	}
+}
+
+.main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .main-container {
@@ -29,20 +36,33 @@
     margin: 10px;
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .journal-main {
     padding: 10px;
     margin: 10px;
     display: flex;
+    flex-grow: 1;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .title {
     text-align: center;
-    padding: 2px 10px;
+    margin-bottom: .1em;
+    /* padding: 2px 10px; */
 }
 .title_block {
     margin: 0px 10px 5px 10px;
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.title_block .absolute {
+    position: absolute;
+    left: 0;
 }
 
 /* for Button.tsx */
@@ -101,6 +121,7 @@
     margin: 5px;
     border: 2px solid black;
     border-radius: 10px;
+    text-align: center;
 }
 
 .book_container {
@@ -204,7 +225,7 @@ body {
     border: 2px solid black;
     border-radius: 10px;
     text-align: center;
-    /* flex-grow: 1; */
+    flex-grow: 1;
     
 }
 .journal-container {
@@ -312,67 +333,6 @@ body {
 
 
 /* Home CSS */
-.daily-quote {
-    background: #a7a7a7;
-    padding: 10px;
-    margin: 10px;
-    border: 2px solid black;
-    border-radius: 10px;
-    width: 300px;
-}
-.todo-base {
-    display: flex;
-
-}
-
-.todo-container {
-    display: flex;
-}
-.todo-items {
-    background: #a7a7a7;
-    padding: 10px;
-    margin: 10px;
-    border: 2px solid black;
-    border-radius: 10px;
-    flex-grow: 1;
-    display: inline-block;
-}
-.todo-item {
-    display: flex;
-    font-size: larger;
-    padding: 5px;
-
-}
-.todo-content {
-    flex-grow: 1;
-    padding: 0px 10px;
-}
-.todo-delete {
-    all: unset;
-    padding: 0 8px;
-}
-.todo-checkbox {
-    scale: 1.5;
-}
-.todo-delete:hover,
-.todo-delete:focus {
-    background-color: #bbbbbb;
-}
-
-.sidebar {
-    background: #a7a7a7;
-    padding: 10px 0px;
-    width: 150px;
-    height: auto;
-    border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    
-    /* display: inline-block; */
-}
-.todo-body {
-    display: flex;
-    flex-grow: 10;
-}
 .main {
     flex-grow: 1;
 }
@@ -467,49 +427,7 @@ body {
     background-color: #bbbbbb;
     cursor: pointer;
 }
-.m-2 {
-    margin: 2px;
-}
-.m-5 {
-    margin: 5px;
-}
-.m-10 {
-    margin: 10px;
-}
-.p-2 {
-    padding: 2px;
-}
-.p-5 {
-    padding: 5px;
-}
-.p-10 {
-    padding: 10px;
-}
-.flex-grow1 {
-    flex-grow: 1;
-}
-.flex-grow0 {
-    flex-grow: 0;
-}
-.flex-shrink0 {
-    flex-shrink: 0;
-}
-.inline-flex {
-    display: inline-flex;
-}
-.flex {
-    display: flex;
-    flex-wrap: wrap;
-}
-.font-lg {
-    font-size: large;
-}
-.pd-5 {
-    padding: 5px;
-}
-.pr-5 {
-    padding-right: 5px;
-}
+
 .color-blue {
     color: blue;
 }
@@ -564,6 +482,7 @@ body {
     margin-bottom: 30px;
     font-size: 1.1rem;
     color: #555;
+    justify-content: center;
 }
 
 /* login-ctaBtn styles */
@@ -634,7 +553,7 @@ body {
     border: 2px solid black;
     border-radius: 10px;
     padding: 10px;
-    margin: 10px;
+    /* margin: 10px; */
 }
 .testament {
     flex-grow: 1;
@@ -692,16 +611,6 @@ body {
     width: 80%;
     margin: 10px auto;
 }
-.verse-container {
-    /* flex-grow: 1; */
-    /* width: 100px; */
-    /* width: 80%; */
-    flex-grow: 1;
-    width: 500px;
-    max-width: 80%;
-    margin: 10px auto;
-    text-align: left;
-}
 
 .verse-element {
     background-color: #a7a7a7;
@@ -742,6 +651,7 @@ body {
     margin-left: 5px;
     margin-left: auto;
 }
+
 
 .daily-verse {
     max-width: 300px;
@@ -855,6 +765,19 @@ body {
     cursor: pointer;
 }
 
+.grey-btn {
+    background: #a7a7a7;
+    border: 1px solid black;
+    border-radius: 10px;
+    color: black;
+    font-size: larger;
+}
+.grey-btn:hover,
+.grey-btn:focus {
+    background-color: #bbbbbb;
+    cursor: pointer;
+}
+
 .search-bar {
     text-align: center;
 }
@@ -875,4 +798,20 @@ body {
 .add-book-btn:focus {
     cursor: pointer;
     text-decoration: underline;
+}
+
+.center {
+    text-align: center;
+}
+
+.center-div {
+    margin: 0 auto;
+}
+
+.home-page {
+    justify-content: center;
+}
+
+.login-box {
+    justify-content: center;
 }

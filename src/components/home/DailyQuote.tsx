@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Quote } from "../library/libraryTypes";
 import api from "../../types/api";
+import HomePageComponent from "../structure/BoxComponent";
 
 const DailyQuoteDisplay = () => {
   // State of current daily quote
@@ -30,25 +31,19 @@ const DailyQuoteDisplay = () => {
   }, []); // Only runs on first render
 
   return (
-    <>
-      <div className="daily-quote">
-        <div className="title_block">
-          <h3 className="title">Daily Quote</h3>
+    <HomePageComponent
+      title="Daily Quote"
+      className="grey-box w-300 m-2 flex-grow"
+    >
+      {currentDailyQuote.contents ? (
+        <div>
+          "{currentDailyQuote.contents}" - By{" "}
+          <i>{currentDailyQuote.book.author}</i>, {currentDailyQuote.book.title}{" "}
         </div>
-
-        {currentDailyQuote.contents ? (
-          <div>
-            "{currentDailyQuote.contents}" - By{" "}
-            <i>{currentDailyQuote.book.author}</i>,{" "}
-            {currentDailyQuote.book.title}{" "}
-          </div>
-        ) : (
-          <div>
-            No Quotes yet. Add some quotes to your books to get started!
-          </div>
-        )}
-      </div>
-    </>
+      ) : (
+        <div>No Quotes yet. Add some quotes to your books to get started!</div>
+      )}
+    </HomePageComponent>
   );
 };
 

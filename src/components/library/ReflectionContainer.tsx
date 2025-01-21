@@ -4,16 +4,15 @@ import api from "../../types/api";
 
 interface Props {
   book: Book;
-  refresh: () => void;
+  onSave: () => void;
 }
 
-const ReflectionView = ({ book, refresh }: Props) => {
+const ReflectionView = ({ book, onSave }: Props) => {
   const handleSave = async (data: string) => {
-    const res = await api.patch(`/books/${book.id}/`, {
+    await api.patch(`/books/${book.id}/`, {
       reflection: data,
     });
-    refresh();
-    console.log(res);
+    onSave();
   };
 
   return (

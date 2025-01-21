@@ -1,4 +1,4 @@
-import { Button } from "reactstrap";
+import BoxComponent from "../structure/BoxComponent";
 import JournalElement from "./JournalElement";
 import { Journal } from "./journalTypes";
 // Takes title, list of books to display
@@ -7,40 +7,23 @@ interface Props {
   journals: Journal[];
   monthYear: string;
   onClick: (journal: Journal) => void;
-  isCurrentMonth?: boolean;
-  handleOpenReflection: () => void;
+  isLongForm?: boolean;
 }
-const JournalGroup = ({
-  journals,
-  monthYear,
-  onClick,
-  isCurrentMonth,
-  handleOpenReflection,
-}: Props) => {
+const JournalGroup = ({ journals, monthYear, onClick, isLongForm }: Props) => {
   return (
     <>
-      <div key={monthYear} id={monthYear} className="journal-month-box">
-        <div className="title_block">
-          <h3 className="title">
-            {monthYear}
-            {/* - {journals.length} Entries */}
-            {isCurrentMonth && (
-              <Button
-                size="sm"
-                onClick={handleOpenReflection}
-                className="title-btn"
-              >
-                Daily
-              </Button>
-            )}
-          </h3>
-        </div>
+      <BoxComponent title={monthYear} className="w-400 m-1 grey-box flex-grow1">
         <div className="journal-container">
           {journals.map((journal, index) => (
-            <JournalElement onClick={onClick} key={index} journal={journal} />
+            <JournalElement
+              onClick={onClick}
+              key={index}
+              journal={journal}
+              isLongForm={isLongForm}
+            />
           ))}
         </div>
-      </div>
+      </BoxComponent>
     </>
   );
 };

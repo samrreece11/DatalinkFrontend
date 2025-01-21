@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Book, Quote } from "./libraryTypes";
 import QuoteContainer from "./QuoteContainer";
 import CreateQuoteForm from "./CreateQuoteForm";
+import { getQuotesByBook } from "./LibraryUtils";
 
 interface Props {
   book: Book;
-  quotes: Quote[];
-  refresh: () => void;
+  onSave: () => void;
 }
-const QuoteView = ({ book, quotes, refresh }: Props) => {
+const QuoteView = ({ book, onSave }: Props) => {
   const [isAddingQuote, setIsAddingQuote] = useState(false);
+
+  const [quotes, setQuotes] = useState<Quote[]>([]);
+
+  useEffect(() => {
+    getQuotesByBook(book.id).then((quotes) => setQuotes(quotes));
+  }, [book]);
+
+  const handleSave = () => {
+    getQuotesByBook(book.id).then((quotes) => setQuotes(quotes));
+    onSave();
+  };
 
   const handleAddQuote = () => {
     setIsAddingQuote(!isAddingQuote);
@@ -21,7 +32,7 @@ const QuoteView = ({ book, quotes, refresh }: Props) => {
         {isAddingQuote ? (
           <CreateQuoteForm
             book={book}
-            refresh={refresh}
+            refresh={handleSave}
             onClose={handleAddQuote}
           />
         ) : (
@@ -34,7 +45,7 @@ const QuoteView = ({ book, quotes, refresh }: Props) => {
           <>
             <div className="divider"></div>
             <QuoteContainer
-              refresh={refresh}
+              refresh={handleSave}
               key={index}
               quote={quote}
               book={book}

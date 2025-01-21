@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import NavBar from "./components/home/NavBar";
 import UserSettings from "./components/user/UserSettings";
 import FaithHome from "./components/faith/FaithHome";
+import BookViewTest from "./components/library/BookViewTest";
 
 function App() {
   useEffect(() => {
@@ -32,6 +33,7 @@ function App() {
               <Route path="/todo/" element={<TodoHome />} />
               <Route path="/settings/" element={<UserSettings />} />
               <Route path="/faith/" element={<FaithHome />} />
+              <Route path="/book/:title" element={<BookViewTest />} />
             </Routes>
           </BrowserRouter>
         </>

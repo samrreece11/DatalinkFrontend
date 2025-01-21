@@ -1,7 +1,7 @@
 import { BibleBook, BibleVerse } from "./FaithTypes";
-import Title from "../utils/TitleBlock";
 import TestamentContainer from "./TestamentContainer";
 import VerseContainer from "./VerseContainer";
+import BoxComponent from "../structure/BoxComponent";
 
 interface Props {
   bibleBooks: BibleBook[];
@@ -16,31 +16,26 @@ export function HomeDisplay({
   getAllVerses,
 }: Props) {
   return (
-    <>
-      <Title>Faith Home</Title>
-      <div className="faith-home flex">
-        <div className="bible-container grey-box">
-          <Title>Bible Books</Title>
-          <div className="testament-container">
-            <TestamentContainer
-              onSelectBook={setCurrentBibleBook}
-              books={bibleBooks.filter((book) => book.isOldTestament === false)}
-            >
-              New Testament
-            </TestamentContainer>
-            <TestamentContainer
-              onSelectBook={setCurrentBibleBook}
-              books={bibleBooks.filter((book) => book.isOldTestament === true)}
-            >
-              Old Testament
-            </TestamentContainer>
-          </div>
-        </div>
-        <VerseContainer
-          onCreate={getAllVerses}
-          verses={verses}
-        ></VerseContainer>
+    <BoxComponent title="Faith Home" titleSize={1} className="">
+      <div className="flex">
+        <VerseContainer onCreate={getAllVerses} verses={verses} />
+        <BoxComponent title="Bible Books" className="grey-box w-75p m-auto">
+          {/* <div className="testament-container"> */}
+          <TestamentContainer
+            onSelectBook={setCurrentBibleBook}
+            books={bibleBooks.filter((book) => book.isOldTestament === false)}
+          >
+            New Testament
+          </TestamentContainer>
+          <TestamentContainer
+            onSelectBook={setCurrentBibleBook}
+            books={bibleBooks.filter((book) => book.isOldTestament === true)}
+          >
+            Old Testament
+          </TestamentContainer>
+          {/* </div> */}
+        </BoxComponent>
       </div>
-    </>
+    </BoxComponent>
   );
 }

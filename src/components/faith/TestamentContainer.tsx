@@ -1,3 +1,4 @@
+import BoxComponent from "../structure/BoxComponent";
 import BibleBookElement from "./BibleBookElement";
 import { BibleBook } from "./FaithTypes";
 
@@ -9,16 +10,18 @@ interface Props {
 
 const TestamentContainer = ({ children, books, onSelectBook }: Props) => {
   return (
-    <div className="testament">
-      <h1 className="testament-title">{children}</h1>
-      <div className="bible-books flex">
+    <BoxComponent
+      title={children}
+      className="flex-grow1 border1 radius-10 m-3 py-2 px-3"
+    >
+      <div className="flex">
         {books.map((book) => (
           <BibleBookElement onSelectBook={onSelectBook} key={book.id}>
             {book}
           </BibleBookElement>
         ))}
       </div>
-    </div>
+    </BoxComponent>
   );
 };
 
