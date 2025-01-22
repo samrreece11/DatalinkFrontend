@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BoxComponent from "../structure/BoxComponent";
 import { Book } from "./libraryTypes";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
@@ -10,10 +10,16 @@ import BookDetailView from "./BookDetailView";
 
 const BookView = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const book = location.state?.book || ({} as Book);
 
-  const handleSave = () => {
-    console.log("Saved");
+  const handleReflectionSave = () => {
+    navigate("/library/");
+  };
+
+  const handleQuoteChange = () => {};
+  const handleBookChange = () => {
+    navigate("/library/");
   };
 
   if (!book.title) {
@@ -50,13 +56,13 @@ const BookView = () => {
         </TabList>
         <TabPanels className="tab-panel">
           <TabPanel>
-            <ReflectionView book={book} onSave={handleSave} />
+            <ReflectionView book={book} onSave={handleReflectionSave} />
           </TabPanel>
           <TabPanel>
-            <QuoteView book={book} onSave={handleSave} />
+            <QuoteView book={book} onSave={handleQuoteChange} />
           </TabPanel>
           <TabPanel>
-            <BookDetailView book={book} onSave={handleSave} />
+            <BookDetailView book={book} onSave={handleBookChange} />
           </TabPanel>
         </TabPanels>
       </TabGroup>

@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Book, Action } from "./libraryTypes";
 import BookGroup from "./BookGroup";
 import api from "../../types/api";
-import SearchBox from "./SearchBox";
+import SearchBox from "../utils/SearchBox";
 import { useNavigate } from "react-router-dom";
 import BoxComponent from "../structure/BoxComponent";
+import { Button } from "reactstrap";
 
 // Define the type for the items
 
@@ -131,69 +132,68 @@ function Library() {
 
   return (
     <BoxComponent title="Library" titleSize={1}>
+      <div className="search-bar">
+        {isSearching ? (
+          <SearchBox
+            search={search}
+            setSearch={setSearch}
+            onBlur={() => setIsSearching(false)}
+          />
+        ) : (
+          <Button
+            color="secondary"
+            className="search-btn mx-1"
+            onClick={() => setIsSearching(true)}
+          >
+            Search Books
+          </Button>
+        )}
+      </div>
       <div className="main">
-        <>
-          <div className="search-bar">
-            {isSearching ? (
-              <SearchBox
-                search={search}
-                setSearch={setSearch}
-                onBlur={() => setIsSearching(false)}
-              />
-            ) : (
-              <button
-                className="search-btn"
-                onClick={() => setIsSearching(true)}
-              >
-                Search Books
-              </button>
-            )}
+        {search ? (
+          <div className="search-results">
+            <BookGroup
+              onDoubleClick={handleViewBook}
+              books={searchBooks}
+              actions={readActions}
+            >
+              Search Results:
+            </BookGroup>
           </div>
-          {search ? (
-            <div className="search-results">
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={searchBooks}
-                actions={readActions}
-              >
-                Search Results:
-              </BookGroup>
-            </div>
-          ) : (
-            <div className="library-main">
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={wishlistBooks}
-                actions={wishlistActions}
-                refresh={refreshList}
-              >
-                Wishlist
-              </BookGroup>
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={currentlyReadingBooks}
-                actions={currentlyReadingActions}
-              >
-                Currently Reading
-              </BookGroup>
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={boughtBooks}
-                actions={boughtActions}
-              >
-                Bought
-              </BookGroup>
+        ) : (
+          <div className="library-main">
+            <BookGroup
+              onDoubleClick={handleViewBook}
+              books={wishlistBooks}
+              actions={wishlistActions}
+              refresh={refreshList}
+            >
+              Wishlist
+            </BookGroup>
+            <BookGroup
+              onDoubleClick={handleViewBook}
+              books={currentlyReadingBooks}
+              actions={currentlyReadingActions}
+            >
+              Currently Reading
+            </BookGroup>
+            <BookGroup
+              onDoubleClick={handleViewBook}
+              books={boughtBooks}
+              actions={boughtActions}
+            >
+              Bought
+            </BookGroup>
 
-              <BookGroup
-                onDoubleClick={handleViewBook}
-                books={readBooks}
-                actions={readActions}
-              >
-                Read
-              </BookGroup>
-            </div>
-          )}
-        </>
+            <BookGroup
+              onDoubleClick={handleViewBook}
+              books={readBooks}
+              actions={readActions}
+            >
+              Read
+            </BookGroup>
+          </div>
+        )}
       </div>
     </BoxComponent>
   );

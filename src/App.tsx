@@ -11,6 +11,7 @@ import NavBar from "./components/home/NavBar";
 import UserSettings from "./components/user/UserSettings";
 import FaithHome from "./components/faith/FaithHome";
 import BookViewTest from "./components/library/BookView";
+import BibleBookView from "./components/faith/BibleBookView";
 
 function App() {
   useEffect(() => {
@@ -34,6 +35,7 @@ function App() {
               <Route path="/settings/" element={<UserSettings />} />
               <Route path="/faith/" element={<FaithHome />} />
               <Route path="/book/:title" element={<BookViewTest />} />
+              <Route path="/bibleBook/:title" element={<BibleBookView />} />
             </Routes>
           </BrowserRouter>
         </>

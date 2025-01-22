@@ -12,7 +12,7 @@ interface Props {
 const JournalGroup = ({ journals, monthYear, onClick, isLongForm }: Props) => {
   return (
     <>
-      <BoxComponent title={monthYear} className="w-400 m-1 grey-box flex-grow1">
+      <BoxComponent title={monthYear} className="w-400 m-1 grey-box flex-grow">
         <div className="journal-container">
           {journals.map((journal, index) => (
             <JournalElement

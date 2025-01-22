@@ -53,6 +53,9 @@
 .flex-grow {
     flex-grow: 1;
 }
+.flex-shrink {
+    flex-shrink: 1;
+}
 .flex-grow0 {
     flex-grow: 0;
 }
@@ -82,6 +85,10 @@
     padding-left: 25%;
     padding-right: 25%;
 }
+.library-flex {
+    flex: 1 1 500px;
+    min-width: 200px;
+}
 
 /* Widths */
 .w-300 {
@@ -92,6 +99,9 @@
 }
 .w-500 {
     width: 500px;
+}
+.mw-500 {
+    max-width: 500px;
 }
 .w-600 {
     width: 600px;
@@ -104,6 +114,12 @@
 }
 .w-75p {
     width: 75%;
+}
+.w-50p {
+    width: 50%;
+}
+.w-25p {
+    width: 25%;
 }
 
 /* Borders */
@@ -126,4 +142,14 @@
 }
 .justify-center {
     justify-content: center;
+}
+
+/* Colors */
+.bg-grey {
+    background-color: #a7a7a7;
+}
+.bg-grey-hover:hover,
+.bg-grey-hover:focus {
+    background-color: #b6b6b6;
+    cursor: pointer;
 }

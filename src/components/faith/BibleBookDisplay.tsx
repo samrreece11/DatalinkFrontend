@@ -37,7 +37,7 @@ const BibleBookDisplay = ({
     <>
       <BoxComponent
         title={currentBibleBook.title}
-        className="w-400 m-1 grey-box flex-grow1"
+        className="w-400 m-1 grey-box flex-grow"
       >
         <div className="flex">
           <div className="bible-notes border-2">

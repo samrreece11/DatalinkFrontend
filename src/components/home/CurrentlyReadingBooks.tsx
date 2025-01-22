@@ -26,7 +26,7 @@ const CurrentlyReadingBooks = () => {
         {books.map((book) => (
           <div
             key={book.id}
-            className="border1 radius-10 p-1 m-1 flex-grow center"
+            className="border1 radius-10 p-1 m-1 flex-grow center bg-grey-hover"
             onClick={() => handleClick(book)}
           >
             {book.title}

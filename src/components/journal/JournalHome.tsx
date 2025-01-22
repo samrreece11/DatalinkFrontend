@@ -5,7 +5,7 @@ import JournalGroup from "./JournalGroup";
 import { Button } from "reactstrap";
 
 import JournalView from "./JournalView";
-import SearchBox from "../library/SearchBox";
+import SearchBox from "../utils/SearchBox";
 
 const JournalHome = () => {
   const [journals, setJournals] = useState<Journal[]>([]);

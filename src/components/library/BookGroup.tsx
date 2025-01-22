@@ -20,7 +20,7 @@ const BookGroup = ({
 }: Props) => {
   return (
     <>
-      <BoxComponent title={children} className="w-500 m-1 grey-box flex-grow">
+      <BoxComponent title={children} className="m-1 grey-box library-flex">
         {refresh ? <CreateBookComponent refresh={refresh} /> : null}
         <div className="book_container">
           {books.map((book) => (
